@@ -34,16 +34,16 @@ ob_start();?>
     <div class="row justify-content-center">
         <div class="col-md-8">
             <h1 class="text-center mb-4">Partijen Overview</h1>
-                        <div class="text-center mb-3">
+            <div class="text-center mb-3">
                 <button class="btn btn-success">+ Voeg partij toe</button>
             </div>
-            <table class="table">
+            <table class="table table-bordered table-striped table-hover table-light ">
                 <thead>
                     <tr>
+                        <th scope="col">#</th>
                         <th scope="col">Image</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">SQL: POINT</th>
+                        <th scope="col">Richting</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -51,19 +51,42 @@ ob_start();?>
                     <!-- Your PHP code to fetch and populate table rows will go here -->
                     <?php
                     // Sample row, replace with PHP code to fetch data from database
+                            // Fetch and display houses with the same user_ID
+                        $partySql = "SELECT idPartij, naam, beschrijving, image, ST_X(positie) AS latitude, ST_Y(positie) AS longitude FROM partij";
+                        $partyStmt = $verbinding->prepare($partySql);
+                        $partyStmt->execute();
+                        $partyResult = $partyStmt->fetchAll();
+
+                        foreach ($partyResult as $row) {
+                            // Determine the label for latitude
+                            $latitudeLabel = $row['latitude'] < 0 ? "Links" : "Rechts";
+
+                            // Determine the label for longitude
+                            $longitudeLabel = $row['longitude'] < 0 ? "Progressief" : "Conversatief";
+
+                            echo "<tr>";
+                            echo "<td>" . $row['idPartij'] . "</td>";
+                            echo "<td>" . $row['image'] . "</td>";
+                            echo "<td>" . $row['naam'] . "</td>";
+                            //echo "<td>" . $row['beschrijving'] . "</td>";
+                            echo "<td>" . $latitudeLabel . ", " . $longitudeLabel . "</td>"; // Display latitude and longitude as plain text
+                            echo "<td>";
+                            echo '<button type="button" class="btn btn-success"><i class="fas fa-edit"></i>EDIT</button>';
+                            echo '<button type="button" class="btn btn-danger"><i class="fas fa-trash-alt"></i>DELETE</button>';
+                            echo "</td>";
+                            echo "</tr>";
+                        }
                     ?>
-                    <tr>
+
+                    <!-- <tr>
                         <td>Sample Image</td>
                         <td>Sample Name</td>
-                        <td>Sample Description</td>
                         <td>Sample SQL: POINT</td>
                         <td>
-                            <button type="button" class="btn btn-primary"><i class="fas fa-eye"></i></button>
                             <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
                             <button type="button" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
                         </td>
-
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
         </div>
