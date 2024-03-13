@@ -57,11 +57,9 @@ if(isset($_POST["submit"])) {
                 $_SESSION['ROL'] = $resultaat['isAdmin'];
          
                 if($rol == 0) {
-                    // header("Location: ../index.php");
-                    $melding .= "Geen admin<br>";
+                    header("Location: pages/overview.php");
                 }elseif($rol == 1) {
-                    // header("Location: ../index.php");
-                    $melding .= "Admin<br>";
+                    header("Location: pages/overview.php");
                 }else{
                    $melding .= "Toegang geweigerd<br>";
                 }

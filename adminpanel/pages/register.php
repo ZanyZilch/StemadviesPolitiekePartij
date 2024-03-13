@@ -58,6 +58,7 @@ if(isset($_POST["submit"])) {
 
     // Controleer of username al bestaat (geen dubbele adressen)
     $sql = "SELECT * FROM gebruiker WHERE username = ?";
+    include("../DBconfig.php");
     $stmt = $verbinding->prepare($sql);
     $stmt->execute(array($username));
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -65,7 +66,7 @@ if(isset($_POST["submit"])) {
         $melding = "Deze username is al genomen.";
     } else {
         $sql = "INSERT INTO gebruiker (idUser, username, password, email, IsAdmin)
-                            values (null,?,?,?)";
+                            values (null,?,?,?,?)";
                             // ID = null, de rest is ?
         $stmt = $verbinding->prepare($sql);
         try {
