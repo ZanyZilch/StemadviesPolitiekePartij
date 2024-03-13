@@ -196,7 +196,7 @@ ob_start();?>
             var partyId = $(this).data('id');
             
             // Confirm deletion
-            if (confirm("Are you sure you want to delete this party?")) {
+            if (confirm("Ben je zeker dat je deze partij wil verwijderen?")) {
                 // Send AJAX request to delete-party.php
                 $.ajax({
                     url: 'delete-partij.php',
