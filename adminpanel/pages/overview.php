@@ -11,6 +11,22 @@ ob_start();?>
     <link rel="stylesheet" href="../assets/css/login.css">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-wmQ6AQ62fTOxy2vC/UN+TTS7d2oSUuU2OpOSDQVuBvUEkTf3zD5tnsNmOOXSJ7vjIJFmiGfBtSF7vOcNZN0xEQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Style to make the SVG background */
+        body {
+            position: relative;
+        }
+
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Set z-index to -1 to position the SVG behind other content */
+        }
+    </style>
 </head>
 <body>
     
@@ -18,6 +34,9 @@ ob_start();?>
     <div class="row justify-content-center">
         <div class="col-md-8">
             <h1 class="text-center mb-4">Partijen Overview</h1>
+                        <div class="text-center mb-3">
+                <button class="btn btn-success">+ Voeg partij toe</button>
+            </div>
             <table class="table">
                 <thead>
                     <tr>
@@ -25,6 +44,7 @@ ob_start();?>
                         <th scope="col">Name</th>
                         <th scope="col">Description</th>
                         <th scope="col">SQL: POINT</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,12 +57,20 @@ ob_start();?>
                         <td>Sample Name</td>
                         <td>Sample Description</td>
                         <td>Sample SQL: POINT</td>
+                        <td>
+                            <button type="button" class="btn btn-primary"><i class="fas fa-eye"></i></button>
+                            <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
+                            <button type="button" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+
 
 
 
