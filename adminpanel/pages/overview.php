@@ -121,7 +121,7 @@ ob_start();?>
                             echo "<td>" . $latitudeLabel . ", " . $longitudeLabel . "</td>"; // Display latitude and longitude as plain text
                             echo "<td>";
                             echo '<button type="button" class="btn btn-success  editBtn"><i class="fas fa-edit"></i>EDIT</button>';
-                            echo '<button type="button" class="btn btn-danger"><i class="fas fa-trash-alt"></i>DELETE</button>';
+                            echo '<button type="button" class="btn btn-danger deleteBtn" data-id="'. $row['idPartij']  . '"><i class="fas fa-trash-alt"></i>DELETE</button>';
                             echo "</td>";
                             echo "</tr>";
                         }
@@ -155,6 +155,7 @@ ob_start();?>
 <!-- Javascript Bootstrap -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.min.js"></script>
 
+<!-- Open modal Page-->
 <script>
   // Script to handle the edit button click and populate the modal with data
   $(document).ready(function() {
@@ -183,6 +184,38 @@ ob_start();?>
       // You can use jQuery AJAX or other methods to send form data to the server
     });
   });
+</script>
+
+
+<!-- Delete from database -->
+<script>
+    $(document).ready(function() {
+        // Listen for click events on delete buttons
+        $('.deleteBtn').click(function() {
+            // Retrieve the party ID from data-id attribute
+            var partyId = $(this).data('id');
+            
+            // Confirm deletion
+            if (confirm("Are you sure you want to delete this party?")) {
+                // Send AJAX request to delete-party.php
+                $.ajax({
+                    url: 'delete-partij.php',
+                    type: 'POST',
+                    data: { id: partyId },
+                    success: function(response) {
+                        // Handle success response
+                        console.log(response);
+                        // Reload the page or update the table as needed
+                        location.reload(); // For example, reload the page
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error response
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+    });
 </script>
 
 </body>
