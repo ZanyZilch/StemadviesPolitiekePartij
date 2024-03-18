@@ -84,69 +84,121 @@ ob_start();?>
             </div>
             <!-- End modal page-->
 
+            <div class="container mt-5">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#partijen">Partijen</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#stellingen">Stellingen</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#meningen">Meningen</a>
+                    </li>
+                </ul>
 
-            <table class="table table-bordered table-striped table-hover table-light ">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Image</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Richting</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div class="tab-content">
+                <div id="partijen" class="container tab-pane active"><br>
+                    <table class="table table-bordered table-striped table-hover table-light ">
+                        <thead>
+                            <tr>
+                                <th scope="col">Image</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Richting</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                    <!-- Your PHP code to fetch and populate table rows will go here -->
-                    <?php
-                    // Sample row, replace with PHP code to fetch data from database
-                            // Fetch and display houses with the same user_ID
-                        $partySql = "SELECT idPartij, naam, beschrijving, image, ST_X(positie) AS latitude, ST_Y(positie) AS longitude FROM partij";
-                        $partyStmt = $verbinding->prepare($partySql);
-                        $partyStmt->execute();
-                        $partyResult = $partyStmt->fetchAll();
+                            <!-- Your PHP code to fetch and populate table rows will go here -->
+                            <?php
+                            // Sample row, replace with PHP code to fetch data from database
+                                    // Fetch and display houses with the same user_ID
+                                $partySql = "SELECT idPartij, naam, beschrijving, image, ST_X(positie) AS latitude, ST_Y(positie) AS longitude FROM partij";
+                                $partyStmt = $verbinding->prepare($partySql);
+                                $partyStmt->execute();
+                                $partyResult = $partyStmt->fetchAll();
 
-                        foreach ($partyResult as $row) {
-                            // Determine the label for latitude
-                            $latitudeLabel = $row['latitude'] < 0 ? "Links" : "Rechts";
+                                foreach ($partyResult as $row) {
+                                    // Determine the label for latitude
+                                    $latitudeLabel = $row['latitude'] < 0 ? "Links" : "Rechts";
 
-                            // Determine the label for longitude
-                            $longitudeLabel = $row['longitude'] < 0 ? "Progressief" : "Conversatief";
+                                    // Determine the label for longitude
+                                    $longitudeLabel = $row['longitude'] < 0 ? "Progressief" : "Conversatief";
 
-                            if($row['latitude'] == 0){
-                                $latitudeLabel = "Midden";
+                                    if($row['latitude'] == 0){
+                                        $latitudeLabel = "Midden";
+                                    }
+
+                                    if($row['longitude'] == 0){
+                                        $longitudeLabel = "Midden";
+                                    }
+
+                                    echo "<tr>";
+                                    echo "<td style='display: none;'>" . $row['idPartij'] . "</td>";
+                                    echo "<td>" . $row['image'] . "</td>";
+                                    echo "<td>" . $row['naam'] . "</td>";
+                                    echo "<td style='display: none;'>" . $row['beschrijving'] . "</td>";
+                                    //echo "<td>" . $row['beschrijving'] . "</td>";
+                                    echo "<td>" . $latitudeLabel . ", " . $longitudeLabel . "</td>"; // Display latitude and longitude as plain text
+                                    echo "<td>";
+                                    echo '<button type="button" class="btn btn-success  editBtn" style="margin-right: 5px;" data-id="'. $row['idPartij']  . '"><i class="fas fa-edit"></i>EDIT</button>';
+                                    echo '<button type="button" class="btn btn-danger deleteBtn" data-id="'. $row['idPartij']  . '"><i class="fas fa-trash-alt"></i>DELETE</button>';
+                                    echo "</td>";
+                                    echo "</tr>";
+                                }
+                            ?>
+
+                            <!-- <tr>
+                                <td>Sample Image</td>
+                                <td>Sample Name</td>
+                                <td>Sample SQL: POINT</td>
+                                <td>
+                                    <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
+                                    <button type="button" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr> -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="stellingen" class="container tab-pane fade"><br>
+                    <!-- Table for Stellingen -->
+                    <!-- Add your code for Stellingen here -->
+                    <p>Stellingen Content Goes Here</p>
+
+                    <div id="stellingen" class="container tab-pane active"><br>
+                    <table class="table table-bordered table-striped table-hover table-light ">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Inhoud</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                            $partySql = "SELECT * FROM `stelling`";
+                            $partyStmt = $verbinding->prepare($partySql);
+                            $partyStmt->execute();
+                            $partyResult = $partyStmt->fetchAll();
+
+                            foreach ($partyResult as $row) {
+                                echo "<tr>";
+                                echo "<td>" . $row['idStelling'] . "</td>";
+                                echo "<td>" . $row['inhoud'] . "</td>";
+                                echo "</tr>";
                             }
-
-                            if($row['longitude'] == 0){
-                                $longitudeLabel = "Midden";
-                            }
-
-                            echo "<tr>";
-                            echo "<td style='display: none;'>" . $row['idPartij'] . "</td>";
-                            echo "<td>" . $row['image'] . "</td>";
-                            echo "<td>" . $row['naam'] . "</td>";
-                            echo "<td style='display: none;'>" . $row['beschrijving'] . "</td>";
-                            //echo "<td>" . $row['beschrijving'] . "</td>";
-                            echo "<td>" . $latitudeLabel . ", " . $longitudeLabel . "</td>"; // Display latitude and longitude as plain text
-                            echo "<td>";
-                            echo '<button type="button" class="btn btn-success  editBtn"><i class="fas fa-edit"></i>EDIT</button>';
-                            echo '<button type="button" class="btn btn-danger deleteBtn" data-id="'. $row['idPartij']  . '"><i class="fas fa-trash-alt"></i>DELETE</button>';
-                            echo "</td>";
-                            echo "</tr>";
-                        }
-                    ?>
-
-                    <!-- <tr>
-                        <td>Sample Image</td>
-                        <td>Sample Name</td>
-                        <td>Sample SQL: POINT</td>
-                        <td>
-                            <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
-                            <button type="button" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
-                        </td>
-                    </tr> -->
-                </tbody>
-            </table>
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+                <div id="meningen" class="container tab-pane fade"><br>
+                    <!-- Table for Meningen -->
+                    <!-- Add your code for Meningen here -->
+                    <p>Meningen Content Goes Here</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
