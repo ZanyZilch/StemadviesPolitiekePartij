@@ -96,6 +96,7 @@ ob_start();?>
                     </tr>
                 </thead>
                 <tbody>
+
                     <!-- Your PHP code to fetch and populate table rows will go here -->
                     <?php
                     // Sample row, replace with PHP code to fetch data from database
@@ -112,8 +113,16 @@ ob_start();?>
                             // Determine the label for longitude
                             $longitudeLabel = $row['longitude'] < 0 ? "Progressief" : "Conversatief";
 
+                            if($row['latitude'] == 0){
+                                $latitudeLabel = "Midden";
+                            }
+
+                            if($row['longitude'] == 0){
+                                $longitudeLabel = "Midden";
+                            }
+
                             echo "<tr>";
-                            echo "<td>" . $row['idPartij'] . "</td>";
+                            echo "<td style='display: none;'>" . $row['idPartij'] . "</td>";
                             echo "<td>" . $row['image'] . "</td>";
                             echo "<td>" . $row['naam'] . "</td>";
                             echo "<td style='display: none;'>" . $row['beschrijving'] . "</td>";
