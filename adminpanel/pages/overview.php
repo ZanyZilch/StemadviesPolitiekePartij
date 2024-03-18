@@ -173,6 +173,8 @@ ob_start();?>
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Inhoud</th>
+                                    <th scope="col">Actions</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -186,6 +188,10 @@ ob_start();?>
                                     echo "<tr>";
                                     echo "<td>" . $row['idStelling'] . "</td>";
                                     echo "<td>" . $row['inhoud'] . "</td>";
+                                    echo "<td>";
+                                    echo '<button type="button" class="btn btn-success  editStellingBtn" style="margin-right: 5px;" data-id="'. $row['idPartij']  . '"><i class="fas fa-edit"></i>EDIT</button>';
+                                    echo '<button type="button" class="btn btn-danger deleteStellingBtn" data-id="'. $row['idStelling']  . '"><i class="fas fa-trash-alt"></i>DELETE</button>';
+                                    echo "</td>";
                                     echo "</tr>";
                                 }
                             ?>
@@ -207,6 +213,7 @@ ob_start();?>
                                     <th scope="col">Stelling</th>
                                     <th scope="col">Standpunt</th>
                                     <th scope="col">Mening</th>
+                                    <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -238,6 +245,10 @@ ob_start();?>
                                     echo "<td>" . $row['stelling_inhoud'] . "</td>";
                                     echo "<td>" . $row['standpunt_X']. ',' . $row['standpunt_Y']  . "</td>";
                                     echo "<td>" . $row['mening'] . "</td>";
+                                    echo "<td>";
+                                    echo '<button type="button" class="btn btn-success  editMeningBtn" style="margin-right: 5px;" data-id="'. $row['idPartij']  . '"><i class="fas fa-edit"></i>EDIT</button>';
+                                    echo '<button type="button" class="btn btn-danger deleteMeningBtn" data-id="'. $row['idpartij_stelling']  . '"><i class="fas fa-trash-alt"></i>DELETE</button>';
+                                    echo "</td>";
                                     echo "</tr>";
                                 }
                             ?>
@@ -296,7 +307,7 @@ ob_start();?>
 </script>
 
 
-<!-- Delete from database -->
+<!-- Delete Partij -->
 <script>
     $(document).ready(function() {
         // Listen for click events on delete buttons
@@ -309,6 +320,68 @@ ob_start();?>
                 // Send AJAX request to delete-party.php
                 $.ajax({
                     url: 'delete-partij.php',
+                    type: 'POST',
+                    data: { id: partyId },
+                    success: function(response) {
+                        // Handle success response
+                        console.log(response);
+                        // Reload the page or update the table as needed
+                        location.reload(); // For example, reload the page
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error response
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<!-- Delete Stelling -->
+<script>
+    $(document).ready(function() {
+        // Listen for click events on delete buttons
+        $('.deleteStellingBtn').click(function() {
+            // Retrieve the party ID from data-id attribute
+            var partyId = $(this).data('id');
+            
+            // Confirm deletion
+            if (confirm("Ben je zeker dat je deze Stelling wil verwijderen?")) {
+                // Send AJAX request to delete-party.php
+                $.ajax({
+                    url: 'delete-stelling.php',
+                    type: 'POST',
+                    data: { id: partyId },
+                    success: function(response) {
+                        // Handle success response
+                        console.log(response);
+                        // Reload the page or update the table as needed
+                        location.reload(); // For example, reload the page
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error response
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<!-- Delete Mening -->
+<script>
+    $(document).ready(function() {
+        // Listen for click events on delete buttons
+        $('.deleteMeningBtn').click(function() {
+            // Retrieve the party ID from data-id attribute
+            var partyId = $(this).data('id');
+            
+            // Confirm deletion
+            if (confirm("Ben je zeker dat je deze Mening wil verwijderen?")) {
+                // Send AJAX request to delete-party.php
+                $.ajax({
+                    url: 'delete-mening.php',
                     type: 'POST',
                     data: { id: partyId },
                     success: function(response) {
