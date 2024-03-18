@@ -189,7 +189,7 @@ ob_start();?>
                                     echo "<td>" . $row['idStelling'] . "</td>";
                                     echo "<td>" . $row['inhoud'] . "</td>";
                                     echo "<td>";
-                                    echo '<button type="button" class="btn btn-success  editStellingBtn" style="margin-right: 5px;" data-id="'. $row['idPartij']  . '"><i class="fas fa-edit"></i>EDIT</button>';
+                                    echo '<button type="button" class="btn btn-success  editStellingBtn" style="margin-right: 5px;" data-id="'. $row['idStelling']  . '"><i class="fas fa-edit"></i>EDIT</button>';
                                     echo '<button type="button" class="btn btn-danger deleteStellingBtn" data-id="'. $row['idStelling']  . '"><i class="fas fa-trash-alt"></i>DELETE</button>';
                                     echo "</td>";
                                     echo "</tr>";
@@ -246,8 +246,8 @@ ob_start();?>
                                     echo "<td>" . $row['standpunt_X']. ',' . $row['standpunt_Y']  . "</td>";
                                     echo "<td>" . $row['mening'] . "</td>";
                                     echo "<td>";
-                                    echo '<button type="button" class="btn btn-success  editMeningBtn" style="margin-right: 5px;" data-id="'. $row['idPartij']  . '"><i class="fas fa-edit"></i>EDIT</button>';
-                                    echo '<button type="button" class="btn btn-danger deleteMeningBtn" data-id="'. $row['idpartij_stelling']  . '"><i class="fas fa-trash-alt"></i>DELETE</button>';
+                                    echo '<button type="button" class="btn btn-success editMeningBtn" style="margin-right: 5px;" party-id="'. $row['idPartij']  . '" stelling-id="'.  $row['idStelling'] .'"><i class="fas fa-edit"></i>EDIT</button>';
+                                    echo '<button type="button" class="btn btn-danger deleteMeningBtn" party-id="'. $row['idPartij']  . '" stelling-id="'.  $row['idStelling'] .'"><i class="fas fa-trash-alt"></i>DELETE</button>';
                                     echo "</td>";
                                     echo "</tr>";
                                 }
@@ -374,16 +374,17 @@ ob_start();?>
     $(document).ready(function() {
         // Listen for click events on delete buttons
         $('.deleteMeningBtn').click(function() {
-            // Retrieve the party ID from data-id attribute
-            var partyId = $(this).data('id');
+            // Retrieve the party ID and stelling ID from data attributes
+            var partyId = $(this).attr('party-id');
+            var stellingId = $(this).attr('stelling-id');
             
             // Confirm deletion
             if (confirm("Ben je zeker dat je deze Mening wil verwijderen?")) {
-                // Send AJAX request to delete-party.php
+                // Send AJAX request to delete-mening.php
                 $.ajax({
                     url: 'delete-mening.php',
                     type: 'POST',
-                    data: { id: partyId },
+                    data: { idParty: partyId, idStelling: stellingId },
                     success: function(response) {
                         // Handle success response
                         console.log(response);
@@ -399,6 +400,7 @@ ob_start();?>
         });
     });
 </script>
+
 
 </body>
 </html>

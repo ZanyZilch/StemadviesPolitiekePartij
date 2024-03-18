@@ -2,12 +2,13 @@
 include("../DBconfig.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
-    $partyId = $_POST['id'];
-
+    $partyId = $_POST['idPartij'];
+    $stellingId = $_POST['idStelling'];
     // Prepare and execute the delete query
-    $deleteSql = "DELETE FROM partij_stelling WHERE idpartij_stelling = :id";
+    $deleteSql = "DELETE FROM partij_stelling WHERE idPartij = :idPartij AND idStelling = :idStelling;";
     $deleteStmt = $verbinding->prepare($deleteSql);
-    $deleteStmt->bindParam(':id', $partyId);
+    $deleteStmt->bindParam(':idPartij', $partyId);
+    $deleteStmt->bindParam(':idStelling', $stellingId);
     $deleteStmt->execute();
 
     if ($deleteStmt->rowCount() > 0) {
