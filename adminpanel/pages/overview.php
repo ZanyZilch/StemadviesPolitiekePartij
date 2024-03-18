@@ -387,6 +387,7 @@ ob_start();?>
                     data: { idParty: partyId, idStelling: stellingId },
                     success: function(response) {
                         // Handle success response
+                        //console.log("partyid =" + partyId, "stellingid =" + stellingId);
                         console.log(response);
                         // Reload the page or update the table as needed
                         location.reload(); // For example, reload the page
