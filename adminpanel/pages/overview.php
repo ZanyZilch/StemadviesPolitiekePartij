@@ -143,7 +143,7 @@ ob_start();?>
                                     echo "<td>" . $latitudeLabel . ", " . $longitudeLabel . "</td>"; // Display latitude and longitude as plain text
                                     echo "<td>";
                                     echo '<button type="button" class="btn btn-success  editBtn" style="margin-right: 5px;" data-id="'. $row['idPartij']  . '"><i class="fas fa-edit"></i>EDIT</button>';
-                                    echo '<button type="button" class="btn btn-danger deleteBtn" data-id="'. $row['idPartij']  . '"><i class="fas fa-trash-alt"></i>DELETE</button>';
+                                    echo '<button type="button" class="btn btn-danger deletePartyBtn" data-id="'. $row['idPartij']  . '"><i class="fas fa-trash-alt"></i>DELETE</button>';
                                     echo "</td>";
                                     echo "</tr>";
                                 }
@@ -168,35 +168,83 @@ ob_start();?>
                     <p>Stellingen Content Goes Here</p>
 
                     <div id="stellingen" class="container tab-pane active"><br>
-                    <table class="table table-bordered table-striped table-hover table-light ">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Inhoud</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                            $partySql = "SELECT * FROM `stelling`";
-                            $partyStmt = $verbinding->prepare($partySql);
-                            $partyStmt->execute();
-                            $partyResult = $partyStmt->fetchAll();
+                        <table class="table table-bordered table-striped table-hover table-light ">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Inhoud</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                                $partySql = "SELECT * FROM `stelling`";
+                                $partyStmt = $verbinding->prepare($partySql);
+                                $partyStmt->execute();
+                                $partyResult = $partyStmt->fetchAll();
 
-                            foreach ($partyResult as $row) {
-                                echo "<tr>";
-                                echo "<td>" . $row['idStelling'] . "</td>";
-                                echo "<td>" . $row['inhoud'] . "</td>";
-                                echo "</tr>";
-                            }
-                        ?>
-                        </tbody>
-                    </table>
-                </div>
+                                foreach ($partyResult as $row) {
+                                    echo "<tr>";
+                                    echo "<td>" . $row['idStelling'] . "</td>";
+                                    echo "<td>" . $row['inhoud'] . "</td>";
+                                    echo "</tr>";
+                                }
+                            ?>
+                            </tbody>
+                        </table>
+
+                    </div>
                 </div>
                 <div id="meningen" class="container tab-pane fade"><br>
                     <!-- Table for Meningen -->
                     <!-- Add your code for Meningen here -->
                     <p>Meningen Content Goes Here</p>
+
+                    <div id="meningen" class="container tab-pane active"><br>
+                        <table class="table table-bordered table-striped table-hover table-light ">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Partij</th>
+                                    <th scope="col">Stelling</th>
+                                    <th scope="col">Standpunt</th>
+                                    <th scope="col">Mening</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                                $partySql = "SELECT 
+                                                ps.idPartij, 
+                                                ps.idStelling, 
+                                                ST_X(ps.standpunt) AS standpunt_X, 
+                                                ST_Y(ps.standpunt) AS standpunt_Y,
+                                                ps.mening, 
+                                                p.naam AS partij_naam, 
+                                                s.inhoud AS stelling_inhoud
+                                            FROM 
+                                                partij_stelling AS ps
+                                            INNER JOIN 
+                                                Partij AS p ON ps.idPartij = p.idPartij
+                                            INNER JOIN 
+                                                Stelling AS s ON ps.idStelling = s.idStelling;";
+
+                                $partyStmt = $verbinding->prepare($partySql);
+                                $partyStmt->execute();
+                                $partyResult = $partyStmt->fetchAll();
+
+                                foreach ($partyResult as $row) {
+                                    echo "<tr>";
+                                    echo "<td style='display: none;'>" . $row['idPartij'] . "</td>";
+                                    echo "<td style='display: none;'>" . $row['idStelling'] . "</td>";
+                                    echo "<td>" . $row['partij_naam'] . "</td>";
+                                    echo "<td>" . $row['stelling_inhoud'] . "</td>";
+                                    echo "<td>" . $row['standpunt_X']. ',' . $row['standpunt_Y']  . "</td>";
+                                    echo "<td>" . $row['mening'] . "</td>";
+                                    echo "</tr>";
+                                }
+                            ?>
+                            </tbody>
+                        </table>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -252,7 +300,7 @@ ob_start();?>
 <script>
     $(document).ready(function() {
         // Listen for click events on delete buttons
-        $('.deleteBtn').click(function() {
+        $('.deletePartyBtn').click(function() {
             // Retrieve the party ID from data-id attribute
             var partyId = $(this).data('id');
             
