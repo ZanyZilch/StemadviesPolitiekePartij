@@ -5,7 +5,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['idStelling']) && isset
     $stellingId = $_POST['idStelling'];
     $inhoud = $_POST['inhoud'];
 
-    // Prepare and execute the update query
     $updateSql = "UPDATE Stelling SET inhoud = :inhoud WHERE idStelling = :idStelling";
     $updateStmt = $verbinding->prepare($updateSql);
     $updateStmt->bindParam(':idStelling', $stellingId);

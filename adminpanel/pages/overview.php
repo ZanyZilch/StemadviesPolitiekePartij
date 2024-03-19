@@ -8,18 +8,35 @@ ob_start();?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Overview</title>
-    <link rel="stylesheet" href="../assets/css/overview.css">
+    <link rel="stylesheet" href="../assets/css/login.css">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-wmQ6AQ62fTOxy2vC/UN+TTS7d2oSUuU2OpOSDQVuBvUEkTf3zD5tnsNmOOXSJ7vjIJFmiGfBtSF7vOcNZN0xEQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Style to make the SVG background */
+        body {
+            position: relative;
+        }
+
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Set z-index to -1 to position the SVG behind other content */
+        }
+    </style>
 </head>
 <body>
+    
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <h1 class="text-center mb-4">Partijen Overview</h1>
-            <div class="text-center mb-3">
-                <button class="btn btn-success">+ Voeg partij toe</button>
-            </div>
+
+            <!-- Modal page-->
+            <!-- Button trigger modal -->
             <button id="editModalTrigger" type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" style="display: none;">
             Edit
             </button>
@@ -140,6 +157,44 @@ ob_start();?>
                 </div>
             </div>
 
+            <!-- Add Party Modal -->
+            <div class="modal fade" id="addPartyModal" tabindex="-1" role="dialog" aria-labelledby="addPartyModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addPartyModalLabel">Add New Partij</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Form for adding party details -->
+                            <form id="addPartyForm">
+                                <div class="form-group">
+                                    <!-- Custom file input -->
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="addImage" name="addImage">
+                                        <label class="custom-file-label" for="addImage">Kies image</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="addName">Naam:</label>
+                                    <input type="text" class="form-control" id="addName" name="addName">
+                                </div>
+                                <div class="form-group">
+                                    <label for="addDescription">Beschrijving:</label>
+                                    <input type="text" class="form-control" id="addDescription" name="addDescription">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="savePartyBtn">Save Partij</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
 
             <div class="container mt-5">
@@ -157,6 +212,9 @@ ob_start();?>
 
             <div class="tab-content">
                 <div id="partijen" class="container tab-pane active"><br>
+                    <div class="text-center mb-3">
+                        <button class="btn btn-success newPartyBtn" data-toggle="modal" data-target="#addPartyModal">+ Voeg partij toe</button>
+                    </div>
                     <table class="table table-bordered table-striped table-hover table-light ">
                         <thead>
                             <tr>
@@ -223,9 +281,12 @@ ob_start();?>
                 <div id="stellingen" class="container tab-pane fade"><br>
                     <!-- Table for Stellingen -->
                     <!-- Add your code for Stellingen here -->
-                    <p>Stellingen Content Goes Here</p>
+                    <!-- <p>Stellingen Content Goes Here</p> -->
 
                     <div id="stellingen" class="container tab-pane active"><br>
+                    <div class="text-center mb-3">
+                        <button class="btn btn-success newStellingBtn">+ Voeg stelling toe</button>
+                    </div>
                         <table class="table table-bordered table-striped table-hover table-light ">
                             <thead>
                                 <tr>
@@ -261,9 +322,12 @@ ob_start();?>
                 <div id="meningen" class="container tab-pane fade"><br>
                     <!-- Table for Meningen -->
                     <!-- Add your code for Meningen here -->
-                    <p>Meningen Content Goes Here</p>
+                    <!-- <p>Meningen Content Goes Here</p> -->
 
                     <div id="meningen" class="container tab-pane active"><br>
+                    <div class="text-center mb-3">
+                        <button class="btn btn-success newMeningBtn">+ Voeg mening toe</button>
+                    </div>
                         <table class="table table-bordered table-striped table-hover table-light ">
                             <thead>
                                 <tr>
@@ -330,6 +394,8 @@ ob_start();?>
 
 <!-- Partij functions -->
 <script>
+    // Add Partij
+
     // Update Partij
     $(document).ready(function() {
         $('.editPartyBtn').click(function() {
@@ -529,7 +595,6 @@ ob_start();?>
         });
     });
 
-
     // Delete Mening
     $(document).ready(function() {
         // Listen for click events on delete buttons
@@ -561,5 +626,8 @@ ob_start();?>
         });
     });
 </script>
+
+
+
 </body>
 </html>
