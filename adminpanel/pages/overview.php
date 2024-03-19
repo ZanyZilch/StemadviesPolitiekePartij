@@ -258,7 +258,7 @@ ob_start();?>
                                     //echo "<td>" . $row['beschrijving'] . "</td>";
                                     echo "<td>" . $latitudeLabel . ", " . $longitudeLabel . "</td>"; // Display latitude and longitude as plain text
                                     echo "<td>";
-                                    echo '<button type="button" class="btn btn-success  editPartyBtn" style="margin-right: 5px;" data-id="'. $row['idPartij']  . '"><i class="fas fa-edit"></i>EDIT</button>';
+                                    echo '<button type="button" class="btn btn-success editPartyBtn" style="margin-right: 5px;" data-id="'. $row['idPartij']  . '"><i class="fas fa-edit"></i>EDIT</button>';
                                     echo '<button type="button" class="btn btn-danger deletePartyBtn" data-id="'. $row['idPartij']  . '"><i class="fas fa-trash-alt"></i>DELETE</button>';
                                     echo "</td>";
                                     echo "</tr>";
@@ -395,7 +395,31 @@ ob_start();?>
 <!-- Partij functions -->
 <script>
     // Add Partij
+    $(document).ready(function() {
+        $('#savePartyBtn').click(function() {
+            var image = $('#addImage').val();
+            var name = $('#addName').val();
+            var description = $('#addDescription').val();
 
+            $.ajax({
+                url: 'create-partij.php',
+                type: 'POST',
+                data: {
+                    image: image,
+                    name: name,
+                    description: description,
+                },
+                success: function(response) {
+                    console.log(response);
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+    
     // Update Partij
     $(document).ready(function() {
         $('.editPartyBtn').click(function() {
@@ -405,13 +429,14 @@ ob_start();?>
             var name = row.find('td:eq(2)').text();
             var description = row.find('td:eq(3)').text();
             var latitudeLongitude = row.find('td:eq(4)').text();
-            
+
             $('#editPartyId').val(partyId);
             $('#editImage').val(image);
             $('#editName').val(name);
             $('#editDescription').val(description);
             $('#editLatitudeLongitude').val(latitudeLongitude);
 
+            // Show modal
             $('#editModal').modal('show');
         });
 
@@ -472,6 +497,32 @@ ob_start();?>
 
 <!-- Stelling functions -->
 <script>
+    // // Add Stelling
+    // $(document).ready(function() {
+    //     $('#savePartyBtn').click(function() {
+    //         var image = $('#addImage').val();
+    //         var name = $('#addName').val();
+    //         var description = $('#addDescription').val();
+
+    //         $.ajax({
+    //             url: 'create-partij.php',
+    //             type: 'POST',
+    //             data: {
+    //                 image: image,
+    //                 name: name,
+    //                 description: description,
+    //             },
+    //             success: function(response) {
+    //                 console.log(response);
+    //                 location.reload();
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 console.error(xhr.responseText);
+    //             }
+    //         });
+    //     });
+    // });
+
     // Update Stelling
     $(document).ready(function() {
         $('.editStellingBtn').click(function() {
