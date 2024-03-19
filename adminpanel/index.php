@@ -20,7 +20,6 @@ ob_start();?>
         <br>
         <div>
             <label>password</label>
-            
             <input type="password" name="password" placeholder="Password" required>
         </div>
         <br>
@@ -33,16 +32,13 @@ ob_start();?>
     <?php
 if(isset($_POST["submit"])) {
     $melding = "";
-    
     $username = htmlspecialchars($_POST["username"]);
     $password = htmlspecialchars($_POST["password"]);
     try {
-
         $sql = "SELECT * FROM gebruiker WHERE username = ?";
         include("DBconfig.php");
         $stmt = $verbinding->prepare($sql);
         $stmt->execute(array($username));
-
         $resultaat = $stmt->fetch(PDO::FETCH_ASSOC);
         if($resultaat) {
             $passwordInDatabase = $resultaat["password"];
@@ -53,7 +49,6 @@ if(isset($_POST["submit"])) {
                 $_SESSION['USERNAME'] = $resultaat['username'];
                 $_SESSION['STATUS'] = 'ACTIEF';
                 $_SESSION['ROL'] = $resultaat['isAdmin'];
-         
                 if($rol == 0) {
                     header("Location: pages/overview.php");
                 }elseif($rol == 1) {
@@ -76,7 +71,6 @@ if(isset($_POST["submit"])) {
 ?>
 </form>
 </div>
-
 </body>
 </html>
 
