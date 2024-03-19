@@ -43,7 +43,7 @@ ob_start();?>
             Edit
             </button>
 
-            <!-- Modal -->
+            <!-- Partij Modal -->
             <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -85,7 +85,81 @@ ob_start();?>
                     </div>
                 </div>
             </div>
-            <!-- End modal page-->
+
+            <!-- Stelling Modal -->
+            <div class="modal fade" id="stellingModal" tabindex="-1" role="dialog" aria-labelledby="stellingModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="stellingModalLabel">Stelling Details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Form for editing stelling details -->
+                            <form id="stellingForm">
+                                <div class="form-group">
+                                    <label for="stellingId">ID:</label>
+                                    <input type="text" class="form-control" id="stellingId" name="stellingId" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="stellingInhoud">Inhoud:</label>
+                                    <input type="text" class="form-control" id="stellingInhoud" name="stellingInhoud">
+                                </div>
+                                <input type="hidden" id="editStellingId" name="editStellingId">
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="saveStellingChangesBtn">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal for Meningen -->
+            <div class="modal fade" id="editMeningModal" tabindex="-1" role="dialog" aria-labelledby="editMeningModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editMeningModalLabel">Edit Mening</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Form for editing Mening -->
+                            <form id="editMeningForm">
+                                <div class="form-group">
+                                    <label for="editPartij">Partij:</label>
+                                    <input type="text" class="form-control" id="editPartij" name="editPartij">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editStelling">Stelling:</label>
+                                    <input type="text" class="form-control" id="editStelling" name="editStelling">
+                                </div>
+                                <input type="hidden" id="editIdPartij" name="editIdPartij">
+                                <input type="hidden" id="editIdStelling" name="editIdStelling">
+                                <div class="form-group">
+                                    <label for="editStandpunt">Standpunt:</label>
+                                    <input type="text" class="form-control" id="editStandpunt" name="editStandpunt">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editMening">Mening:</label>
+                                    <input type="text" class="form-control" id="editMening" name="editMening">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="saveChangesBtn">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
 
             <div class="container mt-5">
                 <ul class="nav nav-tabs" role="tablist">
@@ -177,7 +251,6 @@ ob_start();?>
                                     <th scope="col">#</th>
                                     <th scope="col">Inhoud</th>
                                     <th scope="col">Actions</th>
-
                                 </tr>
                             </thead>
                             <tbody>
@@ -203,6 +276,7 @@ ob_start();?>
 
                     </div>
                 </div>
+
                 <div id="meningen" class="container tab-pane fade"><br>
                     <!-- Table for Meningen -->
                     <!-- Add your code for Meningen here -->
@@ -275,60 +349,59 @@ ob_start();?>
 
 <!-- Partij functions -->
 <script>
-// Update Partij
-$(document).ready(function() {
-    $('.editPartyBtn').click(function() {
-        var row = $(this).closest('tr');
-        var partyId = row.find('td:eq(0)').text();
-        var image = row.find('td:eq(1)').text();
-        var name = row.find('td:eq(2)').text();
-        var description = row.find('td:eq(3)').text();
-        var latitudeLongitude = row.find('td:eq(4)').text();
-        
-        $('#editPartyId').val(partyId);
-        $('#editImage').val(image);
-        $('#editName').val(name);
-        $('#editDescription').val(description);
-        $('#editLatitudeLongitude').val(latitudeLongitude);
+    // Update Partij
+    $(document).ready(function() {
+        $('.editPartyBtn').click(function() {
+            var row = $(this).closest('tr');
+            var partyId = row.find('td:eq(0)').text();
+            var image = row.find('td:eq(1)').text();
+            var name = row.find('td:eq(2)').text();
+            var description = row.find('td:eq(3)').text();
+            var latitudeLongitude = row.find('td:eq(4)').text();
+            
+            $('#editPartyId').val(partyId);
+            $('#editImage').val(image);
+            $('#editName').val(name);
+            $('#editDescription').val(description);
+            $('#editLatitudeLongitude').val(latitudeLongitude);
 
-        $('#editModal').modal('show');
-    });
+            $('#editModal').modal('show');
+        });
 
-    $('#saveChangesBtn').click(function() {
-        var partyId = $('#editPartyId').val();
-        var image = $('#editImage').val();
-        var name = $('#editName').val();
-        var description = $('#editDescription').val();
-        var latitudeLongitude = $('#editLatitudeLongitude').val();
+        $('#saveChangesBtn').click(function() {
+            var partyId = $('#editPartyId').val();
+            var image = $('#editImage').val();
+            var name = $('#editName').val();
+            var description = $('#editDescription').val();
+            var latitudeLongitude = $('#editLatitudeLongitude').val();
 
-        $.ajax({
-            url: 'update-partij.php',
-            type: 'POST',
-            data: {
-                partyId: partyId,
-                image: image,
-                name: name,
-                description: description,
-            },
-            success: function(response) {
-                console.log(response);
-                location.reload();
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-            }
+            $.ajax({
+                url: 'update-partij.php',
+                type: 'POST',
+                data: {
+                    partyId: partyId,
+                    image: image,
+                    name: name,
+                    description: description,
+                },
+                success: function(response) {
+                    console.log(response);
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.custom-file-input').on('change', function() {
+            var fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').html(fileName);
         });
     });
 
-    // Script to handle file input label
-    $('.custom-file-input').on('change', function() {
-        var fileName = $(this).val().split('\\').pop();
-        $(this).next('.custom-file-label').html(fileName);
-    });
-});
-
-// Delete Partij
-$(document).ready(function() {
+    // Delete Partij
+    $(document).ready(function() {
         $('.deletePartyBtn').click(function() {
             var partyId = $(this).data('id');
             
@@ -350,29 +423,55 @@ $(document).ready(function() {
     });
 </script>
 
-<!-- Delete Stelling -->
+<!-- Stelling functions -->
 <script>
+    // Update Stelling
     $(document).ready(function() {
-        // Listen for click events on delete buttons
+        $('.editStellingBtn').click(function() {
+            var row = $(this).closest('tr');
+            var stellingId = row.find('td:eq(0)').text();
+            var stellingInhoud = row.find('td:eq(1)').text();
+        
+            $('#stellingId').val(stellingId);
+            $('#stellingInhoud').val(stellingInhoud);
+
+            $('#stellingModal').modal('show');
+        });
+
+        $('#saveStellingChangesBtn').click(function() {
+            var stellingId = $('#stellingId').val();
+            var stellingInhoud = $('#stellingInhoud').val();
+
+            $.ajax({
+                url: 'update-stelling.php',
+                type: 'POST',
+                data: { idStelling: stellingId, inhoud: stellingInhoud },
+                success: function(response) {
+                    console.log(response);
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+
+    // Delete Stelling
+    $(document).ready(function() {
         $('.deleteStellingBtn').click(function() {
-            // Retrieve the party ID from data-id attribute
             var partyId = $(this).data('id');
             
-            // Confirm deletion
             if (confirm("Ben je zeker dat je deze Stelling wil verwijderen?")) {
-                // Send AJAX request to delete-party.php
                 $.ajax({
                     url: 'delete-stelling.php',
                     type: 'POST',
                     data: { id: partyId },
                     success: function(response) {
-                        // Handle success response
                         console.log(response);
-                        // Reload the page or update the table as needed
-                        location.reload(); // For example, reload the page
+                        location.reload(); 
                     },
                     error: function(xhr, status, error) {
-                        // Handle error response
                         console.error(xhr.responseText);
                     }
                 });
@@ -381,8 +480,76 @@ $(document).ready(function() {
     });
 </script>
 
-<!-- Delete Mening -->
+<!-- Mening functions -->
 <script>
+    // Update Mening
+    $(document).ready(function() {
+        console.log("I am here.");
+        // Show the modal when the editMeningBtn is clicked
+        $('.editMeningBtn').click(function() {
+            console.log("click!");
+            // Retrieve values from the row
+            var partyId = $(this).closest('tr').find('td:eq(0)').text();
+            var stellingId = $(this).closest('tr').find('td:eq(1)').text();
+            var partij = $(this).closest('tr').find('td:eq(2)').text();
+            var stelling = $(this).closest('tr').find('td:eq(3)').text();
+            var standpunt = $(this).closest('tr').find('td:eq(4)').text();
+            var mening = $(this).closest('tr').find('td:eq(5)').text();
+            
+            console.log("partij id: " + partyId);
+            console.log("stelling id: " + stellingId);
+            console.log("partij: " +partij);
+            console.log("stelling: " +stelling);
+            console.log("standpunt: " +standpunt);
+            console.log("mening: " +mening);
+
+            // Set values in the modal input fields
+            $('#editPartij').val(partyId);
+            $('#editStelling').val(stellingId);
+            $('#editStandpunt').val(standpunt);
+            $('#editMening').val(mening);
+
+            // Show the modal
+            $('#editMeningModal').modal('show');
+        });
+
+        // Handle saving changes when the saveChangesBtn in the modal is clicked
+        $('#editMeningModal').on('click', '#saveChangesBtn', function() {
+            // Retrieve values from the modal input fields
+            var partyId = $('#editPartij').val();
+            var stellingId = $('#editStelling').val();
+            var standpunt = $('#editStandpunt').val();
+            var mening = $('#editMening').val();
+            
+            // Perform AJAX request to update Mening
+            $.ajax({
+                url: 'update-mening.php',
+                type: 'POST',
+                data: {
+                    idPartij: partyId,
+                    idStelling: stellingId,
+                    standpunt: standpunt,
+                    mening: mening
+                },
+                success: function(response) {
+                    // Handle success response
+                    console.log(response);
+                    // Optionally, you can reload the page or update the table
+                    // location.reload();
+                },
+                error: function(xhr, status, error) {
+                    // Handle error response
+                    console.error(xhr.responseText);
+                }
+            });
+
+            // Close the modal after saving changes
+            $('#editMeningModal').modal('hide');
+        });
+    });
+
+
+    // Delete Mening
     $(document).ready(function() {
         // Listen for click events on delete buttons
         $('.deleteMeningBtn').click(function() {
@@ -414,7 +581,6 @@ $(document).ready(function() {
     });
 </script>
 
-<!-- Edit Partij -->
 
 
 </body>
