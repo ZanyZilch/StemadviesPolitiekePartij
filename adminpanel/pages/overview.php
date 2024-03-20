@@ -565,13 +565,10 @@ ob_start();?>
 
 <!-- Mening functions -->
 <script>
-    // Update Mening
     $(document).ready(function() {
         console.log("I am here.");
-        // Show the modal when the editMeningBtn is clicked
         $('.editMeningBtn').click(function() {
             console.log("click!");
-            // Retrieve values from the row
             var partyId = $(this).closest('tr').find('td:eq(0)').text();
             var stellingId = $(this).closest('tr').find('td:eq(1)').text();
             var partij = $(this).closest('tr').find('td:eq(2)').text();
@@ -586,25 +583,20 @@ ob_start();?>
             console.log("standpunt: " +standpunt);
             console.log("mening: " +mening);
 
-            // Set values in the modal input fields
             $('#editPartij').val(partyId);
             $('#editStelling').val(stellingId);
             $('#editStandpunt').val(standpunt);
             $('#editMening').val(mening);
 
-            // Show the modal
             $('#editMeningModal').modal('show');
         });
 
-        // Handle saving changes when the saveChangesBtn in the modal is clicked
         $('#editMeningModal').on('click', '#saveChangesBtn', function() {
-            // Retrieve values from the modal input fields
             var partyId = $('#editPartij').val();
             var stellingId = $('#editStelling').val();
             var standpunt = $('#editStandpunt').val();
             var mening = $('#editMening').val();
             
-            // Perform AJAX request to update Mening
             $.ajax({
                 url: 'update-mening.php',
                 type: 'POST',
@@ -615,46 +607,33 @@ ob_start();?>
                     mening: mening
                 },
                 success: function(response) {
-                    // Handle success response
                     console.log(response);
-                    // Optionally, you can reload the page or update the table
-                    // location.reload();
+                    location.reload();
                 },
                 error: function(xhr, status, error) {
-                    // Handle error response
                     console.error(xhr.responseText);
                 }
             });
 
-            // Close the modal after saving changes
             $('#editMeningModal').modal('hide');
         });
     });
 
-    // Delete Mening
     $(document).ready(function() {
-        // Listen for click events on delete buttons
         $('.deleteMeningBtn').click(function() {
-            // Retrieve the party ID and stelling ID from data attributes
             var partyId = $(this).attr('party-id');
             var stellingId = $(this).attr('stelling-id');
             
-            // Confirm deletion
             if (confirm("Ben je zeker dat je deze Mening wil verwijderen?")) {
-                // Send AJAX request to delete-mening.php
                 $.ajax({
                     url: 'delete-mening.php',
                     type: 'POST',
                     data: { idParty: partyId, idStelling: stellingId },
                     success: function(response) {
-                        // Handle success response
-                        //console.log("partyid =" + partyId, "stellingid =" + stellingId);
                         console.log(response);
-                        // Reload the page or update the table as needed
-                        location.reload(); // For example, reload the page
+                        location.reload();
                     },
                     error: function(xhr, status, error) {
-                        // Handle error response
                         console.error(xhr.responseText);
                     }
                 });
