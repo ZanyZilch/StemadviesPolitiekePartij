@@ -370,6 +370,30 @@ ob_start();?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.min.js"></script>
 <script>
     // Add Partij
+    $(document).ready(function() {
+        $('#savePartyBtn').click(function() {
+            var image = $('#addImage').val();
+            var name = $('#addName').val();
+            var description = $('#addDescription').val();
+
+            $.ajax({
+                url: 'create-partij.php',
+                type: 'POST',
+                data: {
+                    image: image,
+                    name: name,
+                    description: description,
+                },
+                success: function(response) {
+                    console.log(response);
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
 
     // Update Partij
     $(document).ready(function() {
@@ -447,60 +471,84 @@ ob_start();?>
 
 <!-- Stelling functions -->
 <script>
-  $(document).ready(function() {
-    $('.editStatementBtn').click(function() {
-        var row = $(this).closest('tr');
-        var statementId = row.find('td:eq(0)').text();
-        var statementText = row.find('td:eq(1)').text();
-        
-        $('#editStatementId').val(statementId);
-        $('#editStatementText').val(statementText);
+    // // Add Stelling
+    // $(document).ready(function() {
+    //     $('#savePartyBtn').click(function() {
+    //         var image = $('#addImage').val();
+    //         var name = $('#addName').val();
+    //         var description = $('#addDescription').val();
 
-        $('#editModal').modal('show');
-    });
+    //         $.ajax({
+    //             url: 'create-partij.php',
+    //             type: 'POST',
+    //             data: {
+    //                 image: image,
+    //                 name: name,
+    //                 description: description,
+    //             },
+    //             success: function(response) {
+    //                 console.log(response);
+    //                 location.reload();
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 console.error(xhr.responseText);
+    //             }
+    //         });
+    //     });
+    // });
 
-    $('#saveChangesBtn').click(function() {
-        var statementId = $('#editStatementId').val();
-        var statementText = $('#editStatementText').val();
+    // Update Stelling
+    $(document).ready(function() {
+        $('.editStellingBtn').click(function() {
+            var row = $(this).closest('tr');
+            var stellingId = row.find('td:eq(0)').text();
+            var stellingInhoud = row.find('td:eq(1)').text();
 
-        $.ajax({
-            url: 'update-statement.php',
-            type: 'POST',
-            data: {
-                statementId: statementId,
-                statementText: statementText
-            },
-            success: function(response) {
-                console.log(response);
-                location.reload();
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-            }
+            $('#stellingId').val(stellingId);
+            $('#stellingInhoud').val(stellingInhoud);
+
+            $('#stellingModal').modal('show');
         });
-    });
 
-    $('.deleteStatementBtn').click(function() {
-        var statementId = $(this).data('id');
-        
-        if (confirm("Ben je zeker dat je deze stelling wil verwijderen?")) {
-            $.ajax({
-                url: 'delete-statement.php',
+        $('#saveStellingChangesBtn').click(function() {
+            var stellingId = $('#stellingId').val();
+            var stellingInhoud = $('#stellingInhoud').val();
+           $.ajax({
+                url: 'update-stelling.php',
                 type: 'POST',
-                data: { id: statementId },
+                data: { idStelling: stellingId, inhoud: stellingInhoud },
                 success: function(response) {
                     console.log(response);
-                    location.reload(); 
+                    location.reload();
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
                 }
             });
-        }
+        });
     });
-});
 
+    // Delete Stelling
+    $(document).ready(function() {
+        $('.deleteStellingBtn').click(function() {
+            var partyId = $(this).data('id');
 
+            if (confirm("Ben je zeker dat je deze Stelling wil verwijderen?")) {
+                $.ajax({
+                    url: 'delete-stelling.php',
+                    type: 'POST',
+                    data: { id: partyId },
+                    success: function(response) {
+                        console.log(response);
+                        location.reload(); 
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+    });
 </script>
 
 <!-- Mening functions -->
