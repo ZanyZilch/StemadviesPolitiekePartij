@@ -11,22 +11,40 @@
     </thead>
     <!-- Table body -->
     <tbody>
-        <?php if (!empty($partyResult) && is_array($partyResult)): ?>
-            <?php foreach ($partyResult as $row): ?>
-                <tr>
-                    <!-- Render table data -->
-                    <!-- Example: -->
-                    <td><?php echo isset($row['partij_naam']) ? $row['partij_naam'] : 'Niet beschikbaar'; ?></td>
-                    <td><?php echo isset($row['stelling_inhoud']) ? $row['stelling_inhoud'] : 'Niet beschikbaar'; ?></td>
-                    <td><?php echo isset($row['standpunt_X']) && isset($row['standpunt_Y']) ? $row['standpunt_X'] . ', ' . $row['standpunt_Y'] : 'Niet beschikbaar'; ?></td>
-                    <td><?php echo isset($row['mening']) ? $row['mening'] : 'Niet beschikbaar'; ?></td>
-                    <!-- Add more columns as needed -->
-                </tr>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <tr>
-                <td colspan="5">Geen gegevens gevonden</td>
-            </tr>
-        <?php endif; ?>
+    <?php
+    $partySql = "SELECT 
+                    ps.idPartij, 
+                    ps.idStelling, 
+                    ST_X(ps.standpunt) AS standpunt_X, 
+                    ST_Y(ps.standpunt) AS standpunt_Y,
+                    ps.mening, 
+                    p.naam AS partij_naam, 
+                    s.inhoud AS stelling_inhoud
+                FROM 
+                    partij_stelling AS ps
+                INNER JOIN 
+                    Partij AS p ON ps.idPartij = p.idPartij
+                INNER JOIN 
+                    Stelling AS s ON ps.idStelling = s.idStelling;";
+
+    $partyStmt = $verbinding->prepare($partySql);
+    $partyStmt->execute();
+    $partyResult = $partyStmt->fetchAll();
+
+    foreach ($partyResult as $row) {
+        echo "<tr>";
+        echo "<td style='display: none;'>" . $row['idPartij'] . "</td>";
+        echo "<td style='display: none;'>" . $row['idStelling'] . "</td>";
+        echo "<td>" . $row['partij_naam'] . "</td>";
+        echo "<td>" . $row['stelling_inhoud'] . "</td>";
+        echo "<td>" . $row['standpunt_X']. ',' . $row['standpunt_Y']  . "</td>";
+        echo "<td>" . $row['mening'] . "</td>";
+        echo "<td>";
+        echo '<button type="button" class="btn btn-success editMeningBtn" style="margin-right: 5px;" party-id="'. $row['idPartij']  . '" stelling-id="'.  $row['idStelling'] .'"><i class="fas fa-edit"></i>EDIT</button>';
+        echo '<button type="button" class="btn btn-danger deleteMeningBtn" party-id="'. $row['idPartij']  . '" stelling-id="'.  $row['idStelling'] .'"><i class="fas fa-trash-alt"></i>DELETE</button>';
+        echo "</td>";
+        echo "</tr>";
+    }
+?>
     </tbody>
 </table>

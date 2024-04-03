@@ -1,27 +1,23 @@
 <?php 
-// Inclusief DBconfig.php alleen als het nog niet is ingesloten
 if (!defined('USER')) {
     include("../DBconfig.php");
 }
 
 try {
-    // Voorbereidde statement om partijgegevens op te halen
     $stmt = $verbinding->query("SELECT * FROM partij");
     
-    // Controleer of er resultaten zijn
     if ($stmt->rowCount() > 0) {
-        // Haal de gegevens op en wijs deze toe aan $partyResult
         $partyResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
     } else {
-        // Toon een melding als er geen partijgegevens zijn gevonden
         echo "<tr><td colspan='4'>Geen partijen gevonden.</td></tr>";
     }
 } catch(PDOException $e) {
-    // Als er een fout optreedt bij het uitvoeren van de query, geef dan een foutmelding weer
     echo "Er is een fout opgetreden bij het ophalen van de partijgegevens: " . $e->getMessage();
 }
 ?>
-
+<div class="text-center mb-3">
+    <button class="btn btn-success newPartyBtn" data-toggle="modal" data-target="#addPartyModal">+ Voeg partij toe</button>
+</div>
 <table class="table table-bordered table-striped table-hover table-light">
     <!-- Table header -->
     <thead>
@@ -34,20 +30,41 @@ try {
     </thead>
     <!-- Table body -->
     <tbody>
-        <?php 
-        // Controleer of $partyResult is ingesteld en niet leeg is
-        if(isset($partyResult) && !empty($partyResult)) {
-            // Loop door de partijgegevens en toon deze in de tabel
-            foreach ($partyResult as $row): ?>
-                <tr>
-                    <!-- Render table data -->
-                    <!-- Voorbeeld: -->
-                    <td><?php echo $row['image']; ?></td>
-                    <td><?php echo $row['naam']; ?></td>
-                    <!-- Voeg meer kolommen toe indien nodig -->
-                </tr>
-            <?php endforeach; 
-        }
+        <?php
+            // Fetch and display houses with the same user_ID
+            $partySql = "SELECT idPartij, naam, beschrijving, image, ST_X(positie) AS latitude, ST_Y(positie) AS longitude FROM partij";
+            $partyStmt = $verbinding->prepare($partySql);
+            $partyStmt->execute();
+            $partyResult = $partyStmt->fetchAll();
+
+            foreach ($partyResult as $row) {
+                // Determine the label for latitude
+                $latitudeLabel = $row['latitude'] < 0 ? "Links" : "Rechts";
+
+                // Determine the label for longitude
+                $longitudeLabel = $row['longitude'] < 0 ? "Progressief" : "Conversatief";
+
+                if($row['latitude'] == 0){
+                    $latitudeLabel = "Midden";
+                }
+
+                if($row['longitude'] == 0){
+                    $longitudeLabel = "Midden";
+                }
+
+                echo "<tr>";
+                echo "<td style='display: none;'>" . $row['idPartij'] . "</td>";
+                echo "<td>" . $row['image'] . "</td>";
+                echo "<td>" . $row['naam'] . "</td>";
+                echo "<td style='display: none;'>" . $row['beschrijving'] . "</td>";
+                //echo "<td>" . $row['beschrijving'] . "</td>";
+                echo "<td>" . $latitudeLabel . ", " . $longitudeLabel . "</td>"; // Display latitude and longitude as plain text
+                echo "<td>";
+                echo '<button type="button" class="btn btn-success  editPartyBtn" style="margin-right: 5px;" data-id="'. $row['idPartij']  . '"><i class="fas fa-edit"></i>EDIT</button>';
+                echo '<button type="button" class="btn btn-danger deletePartyBtn" data-id="'. $row['idPartij']  . '"><i class="fas fa-trash-alt"></i>DELETE</button>';
+                echo "</td>";
+                echo "</tr>";
+            }
         ?>
     </tbody>
 </table>

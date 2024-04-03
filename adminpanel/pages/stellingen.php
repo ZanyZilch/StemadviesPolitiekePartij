@@ -9,20 +9,22 @@
     </thead>
     <!-- Table body -->
     <tbody>
-        <?php if (isset($partyResult) && is_array($partyResult)): ?>
-            <?php foreach ($partyResult as $row): ?>
-                <tr>
-                    <!-- Render table data -->
-                    <!-- Example: -->
-                    <td><?php echo isset($row['idStelling']) ? $row['idStelling'] : 'Niet beschikbaar'; ?></td>
-                    <td><?php echo isset($row['inhoud']) ? $row['inhoud'] : 'Niet beschikbaar'; ?></td>
-                    <!-- Add more columns as needed -->
-                </tr>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <tr>
-                <td colspan="3">Geen gegevens gevonden</td>
-            </tr>
-        <?php endif; ?>
+        <?php
+            $partySql = "SELECT * FROM `stelling`";
+            $partyStmt = $verbinding->prepare($partySql);
+            $partyStmt->execute();
+            $partyResult = $partyStmt->fetchAll();
+
+            foreach ($partyResult as $row) {
+                echo "<tr>";
+                echo "<td>" . $row['idStelling'] . "</td>";
+                echo "<td>" . $row['inhoud'] . "</td>";
+                echo "<td>";
+                echo '<button type="button" class="btn btn-success editStellingBtn" style="margin-right: 5px;" data-id="'. $row['idStelling']  . '"><i class="fas fa-edit"></i>EDIT</button>';
+                echo '<button type="button" class="btn btn-danger deleteStellingBtn" data-id="'. $row['idStelling']  . '"><i class="fas fa-trash-alt"></i>DELETE</button>';
+                echo "</td>";
+                echo "</tr>";
+            }
+        ?>
     </tbody>
 </table>

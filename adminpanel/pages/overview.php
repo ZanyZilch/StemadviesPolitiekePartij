@@ -19,6 +19,169 @@ ob_start();
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
+            <h1 class="text-center mb-4">Partijen Overview</h1>
+
+            <!-- Modal page-->
+            <!-- Button trigger modal -->
+            <button id="editModalTrigger" type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" style="display: none;">
+            Edit
+            </button>
+
+            <!-- Partij Modal -->
+            <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Edit Partij Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Form for editing party details -->
+                        <form id="editForm">
+                            <div class="form-group">
+                                <!-- Custom file input -->
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="editImage" name="editImage">
+                                    <label class="custom-file-label" for="editImage">Choose image</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="editName">Name:</label>
+                                <input type="text" class="form-control" id="editName" name="editName">
+                            </div>
+                            <div class="form-group">
+                                <label for="editDescription">Description:</label>
+                                <input type="text" class="form-control" id="editDescription" name="editDescription">
+                            </div>
+                            <div class="form-group">
+                                <label for="editLatitudeLongitude">Latitude + Longitude:</label>
+                                <input type="text" class="form-control" id="editLatitudeLongitude" name="editLatitudeLongitude" readonly>
+                            </div>
+                            <input type="hidden" id="editPartyId" name="editPartyId">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="saveChangesBtn">Save changes</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stelling Modal -->
+            <div class="modal fade" id="stellingModal" tabindex="-1" role="dialog" aria-labelledby="stellingModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="stellingModalLabel">Stelling Details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Form for editing stelling details -->
+                            <form id="stellingForm">
+                                <div class="form-group">
+                                    <label for="stellingId">ID:</label>
+                                    <input type="text" class="form-control" id="stellingId" name="stellingId" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="stellingInhoud">Inhoud:</label>
+                                    <input type="text" class="form-control" id="stellingInhoud" name="stellingInhoud">
+                                </div>
+                                <input type="hidden" id="editStellingId" name="editStellingId">
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="saveStellingChangesBtn">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal for Meningen -->
+            <div class="modal fade" id="editMeningModal" tabindex="-1" role="dialog" aria-labelledby="editMeningModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editMeningModalLabel">Edit Mening</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Form for editing Mening -->
+                            <form id="editMeningForm">
+                                <div class="form-group">
+                                    <label for="editPartij">Partij:</label>
+                                    <input type="text" class="form-control" id="editPartij" name="editPartij">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editStelling">Stelling:</label>
+                                    <input type="text" class="form-control" id="editStelling" name="editStelling">
+                                </div>
+                                <input type="hidden" id="editIdPartij" name="editIdPartij">
+                                <input type="hidden" id="editIdStelling" name="editIdStelling">
+                                <div class="form-group">
+                                    <label for="editStandpunt">Standpunt:</label>
+                                    <input type="text" class="form-control" id="editStandpunt" name="editStandpunt">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editMening">Mening:</label>
+                                    <input type="text" class="form-control" id="editMening" name="editMening">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="saveChangesBtn">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Party Modal -->
+            <div class="modal fade" id="addPartyModal" tabindex="-1" role="dialog" aria-labelledby="addPartyModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addPartyModalLabel">Add New Partij</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Form for adding party details -->
+                            <form id="addPartyForm">
+                                <div class="form-group">
+                                    <!-- Custom file input -->
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="addImage" name="addImage">
+                                        <label class="custom-file-label" for="addImage">Kies image</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="addName">Naam:</label>
+                                    <input type="text" class="form-control" id="addName" name="addName">
+                                </div>
+                                <div class="form-group">
+                                    <label for="addDescription">Beschrijving:</label>
+                                    <input type="text" class="form-control" id="addDescription" name="addDescription">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="savePartyBtn">Save Partij</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#partijen">Partijen</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#stellingen">Stellingen</a></li>
@@ -75,9 +238,38 @@ ob_start();
             <path d="M 0 42 Q 355.5 -100 711 400 Q 1066.5 900 1422 42" opacity="0.09"></path>
         </g>
     </svg>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.min.js"></script>
+
     <script>
+        // Add Partij
+        $(document).ready(function() {
+            $('#newPartyBtn').click(function() {
+                var image = $('#addImage').val();
+                var name = $('#addName').val();
+                var description = $('#addDescription').val();
+
+                $.ajax({
+                    url: 'functions/create-partij.php',
+                    type: 'POST',
+                    data: {
+                        image: image,
+                        name: name,
+                        description: description,
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+
+        // Update Partij
         $(document).ready(function () {
             $('.editPartyBtn').click(function () {
                 var row = $(this).closest('tr');
@@ -93,6 +285,7 @@ ob_start();
                 $('#editLatitudeLongitude').val(latitudeLongitude);
                 $('#editModal').modal('show');
             });
+
             $('#saveChangesBtn').click(function () {
                 var partyId = $('#editPartyId').val();
                 var image = $('#editImage').val();
@@ -101,7 +294,7 @@ ob_start();
                 var latitudeLongitude = $('#editLatitudeLongitude').val();
 
                 $.ajax({
-                    url: 'update-partij.php',
+                    url: 'functions/update-partij.php',
                     type: 'POST',
                     data: {
                         partyId: partyId,
@@ -132,7 +325,7 @@ ob_start();
 
                 if (confirm("Ben je zeker dat je deze partij wil verwijderen?")) {
                     $.ajax({
-                        url: 'delete-partij.php',
+                        url: 'functions/delete-partij.php',
                         type: 'POST',
                         data: { id: partyId },
                         success: function (response) {
@@ -147,6 +340,7 @@ ob_start();
             });
         });
     </script>
+
     <script>
         // Update Stelling
         $(document).ready(function () {
@@ -166,7 +360,7 @@ ob_start();
                 var stellingInhoud = $('#stellingInhoud').val();
 
                 $.ajax({
-                    url: 'update-stelling.php',
+                    url: 'functions/update-stelling.php',
                     type: 'POST',
                     data: { idStelling: stellingId, inhoud: stellingInhoud },
                     success: function (response) {
@@ -187,7 +381,7 @@ ob_start();
 
                 if (confirm("Ben je zeker dat je deze Stelling wil verwijderen?")) {
                     $.ajax({
-                        url: 'delete-stelling.php',
+                        url: 'functions/delete-stelling.php',
                         type: 'POST',
                         data: { id: partyId },
                         success: function (response) {
@@ -202,6 +396,7 @@ ob_start();
             });
         });
     </script>
+
     <script>
         // Update Mening
         $(document).ready(function () {
@@ -233,7 +428,7 @@ ob_start();
 
                 // Perform AJAX request to update Mening
                 $.ajax({
-                    url: 'update-mening.php',
+                    url: 'functions/update-mening.php',
                     type: 'POST',
                     data: {
                         idPartij: partyId,
@@ -245,7 +440,7 @@ ob_start();
                         // Handle success response
                         console.log(response);
                         // Optionally, you can reload the page or update the table
-                        // location.reload();
+                        location.reload();
                     },
                     error: function (xhr, status, error) {
                         // Handle error response
@@ -270,7 +465,7 @@ ob_start();
                 if (confirm("Ben je zeker dat je deze Mening wil verwijderen?")) {
                     // Send AJAX request to delete-mening.php
                     $.ajax({
-                        url: 'delete-mening.php',
+                        url: 'functions/delete-mening.php',
                         type: 'POST',
                         data: { idParty: partyId, idStelling: stellingId },
                         success: function (response) {

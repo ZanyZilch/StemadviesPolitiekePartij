@@ -1,5 +1,5 @@
 <?php
-include("../DBconfig.php");
+include("../../DBconfig.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['idPartij']) && isset($_POST['idStelling'])) {
     $partyId = $_POST['idPartij'];
