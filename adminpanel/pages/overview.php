@@ -181,6 +181,81 @@ ob_start();
                 </div>
             </div>
 
+            <!-- Add Stelling Modal -->
+            <div class="modal fade" id="addStellingModal" tabindex="-1" role="dialog" aria-labelledby="addStellingModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addStellingModalLabel">Add New Stelling</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Form for adding party details -->
+                            <form id="addStellingForm">
+                                <div class="form-group">
+                                </div>
+                                <div class="form-group">
+                                    <label for="addInhoud">Inhoud:</label>
+                                    <input type="text" class="form-control" id="addInhoud" name="addInhoud">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="saveStellingBtn">Save Stelling</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Mening Modal -->
+            <div class="modal fade" id="addMeningModal" tabindex="-1" role="dialog" aria-labelledby="addMeningModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addMeningModalLabel">Add New Mening</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Form for adding Mening details -->
+                            <form id="addMeningForm">
+                                <div class="form-group">
+                                </div>
+
+                                <!-- Change to selector -->
+                                <div class="form-group">
+                                    <label for="addPartyID">Partij:</label>
+                                    <input type="text" class="form-control" id="addPartyID" name="addPartyID">
+                                </div>
+
+                                <!-- Change to selector -->
+                                <div class="form-group">
+                                    <label for="addMening">Mening:</label>
+                                    <input type="text" class="form-control" id="addMening" name="addMening">
+                                </div>
+
+                                <!-- Change to GEOMETERYS -->
+                                <div class="form-group">
+                                    <label for="addName">Naam:</label>
+                                    <input type="text" class="form-control" id="addName" name="addName">
+                                </div>
+                                <div class="form-group">
+                                    <label for="addMening">Mening:</label>
+                                    <input type="text" class="form-control" id="addMening" name="addMening">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="savePartyBtn">Save Partij</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#partijen">Partijen</a></li>
@@ -189,14 +264,23 @@ ob_start();
                 </ul>
                 <div class="tab-content">
                     <div id="partijen" class="container tab-pane active">
-                        <?php include 'partijen.php'; ?>
+                        <div class="text-center mb-3">
+                            <button class="btn btn-success newPartyBtn" data-toggle="modal" data-target="#addPartyModal">+ Voeg partij toe</button>
+                        </div>
+                            <?php include 'partijen.php'; ?>
                     </div>
 
                     <div id="stellingen" class="container tab-pane fade">
+                    <div class="text-center mb-3">
+                        <button class="btn btn-success newStellingBtn" data-toggle="modal" data-target="#addStellingModal">+ Voeg partij toe</button>
+                    </div>
                         <?php include 'stellingen.php'; ?>
                     </div>
 
                     <div id="meningen" class="container tab-pane fade">
+                    <div class="text-center mb-3">
+                        <button class="btn btn-success newMeningBtn" data-toggle="modal" data-target="#addMeningModal">+ Voeg partij toe</button>
+                    </div>
                         <?php include 'meningen.php'; ?>
                     </div>
                 </div>
@@ -245,7 +329,7 @@ ob_start();
     <script>
         // Add Partij
         $(document).ready(function() {
-            $('#newPartyBtn').click(function() {
+            $('#savePartyBtn').click(function() {
                 var image = $('#addImage').val();
                 var name = $('#addName').val();
                 var description = $('#addDescription').val();
@@ -342,6 +426,29 @@ ob_start();
     </script>
 
     <script>
+        // Add Stelling
+        $(document).ready(function() {
+            $('#saveStellingBtn').click(function() {
+                var Inhoud = $('#addInhoud').val();
+                
+                $.ajax({
+                    url: 'functions/create-stelling.php',
+                    type: 'POST',
+                    data: {
+                        inhoud: Inhoud
+                    },
+                    success: function(response) {
+                        console.log(response);
+
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+
         // Update Stelling
         $(document).ready(function () {
             $('.editStellingBtn').click(function () {
@@ -396,8 +503,36 @@ ob_start();
             });
         });
     </script>
-
+    
     <script>
+        // Add Mening
+        $(document).ready(function() {
+            $('#saveMeningBtn').click(function() {
+                var partyID = $('#addPartyID').val();
+                var stellingID = $('#addStellingID').val();
+                var standpunt = $('#addStandpunt').val();
+                var mening = $('#addMening').val();
+
+                $.ajax({
+                    url: 'functions/create-mening.php',
+                    type: 'POST',
+                    data: {
+                        partyID: partyID,
+                        stellingID: stellingID,
+                        standpunt: standpunt,
+                        mening: mening,
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        //location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+
         // Update Mening
         $(document).ready(function () {
             // Show the modal when the editMeningBtn is clicked

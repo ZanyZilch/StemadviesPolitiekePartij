@@ -15,9 +15,7 @@ try {
     echo "Er is een fout opgetreden bij het ophalen van de partijgegevens: " . $e->getMessage();
 }
 ?>
-<div class="text-center mb-3">
-    <button class="btn btn-success newPartyBtn" data-toggle="modal" data-target="#addPartyModal">+ Voeg partij toe</button>
-</div>
+
 <table class="table table-bordered table-striped table-hover table-light">
     <!-- Table header -->
     <thead>
