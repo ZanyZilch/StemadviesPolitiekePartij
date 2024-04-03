@@ -226,23 +226,69 @@ ob_start();
                                 <div class="form-group">
                                 </div>
 
-                                <!-- Change to selector -->
                                 <div class="form-group">
                                     <label for="addPartyID">Partij:</label>
-                                    <input type="text" class="form-control" id="addPartyID" name="addPartyID">
+                                    <select class="form-control selectpicker" id="addPartyID" name="addPartyID" data-live-search="true">
+                                    <?php
+                                        $partySql = "SELECT * FROM `partij`";
+                                        $partyStmt = $verbinding->prepare($partySql);
+                                        $partyStmt->execute();
+                                        $partyResult = $partyStmt->fetchAll();
+
+                                        foreach ($partyResult as $row) {
+                                            echo "<option value='" . $row['idPartij'] . "'>" . $row['naam'] . "</option>";
+                                        }
+                                    ?>
+                                    </select>
                                 </div>
 
-                                <!-- Change to selector -->
                                 <div class="form-group">
-                                    <label for="addMening">Mening:</label>
-                                    <input type="text" class="form-control" id="addMening" name="addMening">
+                                    <label for="addStellingID">Stelling:</label>
+                                    <select class="form-control selectpicker" id="addStellingID" name="addStellingID" data-live-search="true">
+                                    <?php
+                                        $stellingSql = "SELECT * FROM `stelling`";
+                                        $stellingStmt = $verbinding->prepare($stellingSql);
+                                        $stellingStmt->execute();
+                                        $stellingResult = $stellingStmt->fetchAll();
+
+                                        foreach ($stellingResult as $row) {
+                                            echo"<option value='". $row['idStelling'] . "'>". $row['inhoud'] . "</option>";
+                                        }
+
+                                    ?>
+                                    </select>
                                 </div>
 
-                                <!-- Change to GEOMETERYS -->
                                 <div class="form-group">
-                                    <label for="addName">Naam:</label>
-                                    <input type="text" class="form-control" id="addName" name="addName">
+                                    <label for="addStandpunt">Standpunt:</label>
+                                    <input type="text" class="form-control" id="addStandpunt" name="addStandpunt" readonly>
+                                    
+                                    <!-- X- en Y-coördinaten naast elkaar -->
+                                    <div class="d-flex">
+                                        <div class="mr-2">
+                                            <label for="addXCoordinate">X-coordinate:</label>
+                                            <select class="form-control selectpicker" id="addXCoordinate" name="addXCoordinate" data-live-search="true" size="4">
+                                                <?php
+                                                for ($i = -5; $i <= 5; $i++) {
+                                                    echo "<option value='" . $i . "'>" . $i . "</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="addYCoordinate">Y-coordinate:</label>
+                                            <select class="form-control selectpicker" id="addYCoordinate" name="addYCoordinate" data-live-search="true" size="4">
+                                                <?php
+                                                for ($i = -5; $i <= 5; $i++) {
+                                                    echo "<option value='" . $i . "'>" . $i . "</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
+
+
                                 <div class="form-group">
                                     <label for="addMening">Mening:</label>
                                     <input type="text" class="form-control" id="addMening" name="addMening">
@@ -251,7 +297,7 @@ ob_start();
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" id="savePartyBtn">Save Partij</button>
+                            <button type="button" class="btn btn-primary" id="saveMeningBtn">Save Mening</button>
                         </div>
                     </div>
                 </div>
@@ -271,16 +317,16 @@ ob_start();
                     </div>
 
                     <div id="stellingen" class="container tab-pane fade">
-                    <div class="text-center mb-3">
-                        <button class="btn btn-success newStellingBtn" data-toggle="modal" data-target="#addStellingModal">+ Voeg partij toe</button>
-                    </div>
+                        <div class="text-center mb-3">
+                            <button class="btn btn-success newStellingBtn" data-toggle="modal" data-target="#addStellingModal">+ Voeg stelling toe</button>
+                        </div>
                         <?php include 'stellingen.php'; ?>
                     </div>
 
                     <div id="meningen" class="container tab-pane fade">
-                    <div class="text-center mb-3">
-                        <button class="btn btn-success newMeningBtn" data-toggle="modal" data-target="#addMeningModal">+ Voeg partij toe</button>
-                    </div>
+                        <div class="text-center mb-3">
+                            <button class="btn btn-success newMeningBtn" data-toggle="modal" data-target="#addMeningModal">+ Voeg mening toe</button>
+                        </div>
                         <?php include 'meningen.php'; ?>
                     </div>
                 </div>
@@ -323,8 +369,21 @@ ob_start();
         </g>
     </svg>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Bootstrap-select CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css">
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Bootstrap-select JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js"></script>
+
 
     <script>
         // Add Partij
@@ -508,9 +567,10 @@ ob_start();
         // Add Mening
         $(document).ready(function() {
             $('#saveMeningBtn').click(function() {
-                var partyID = $('#addPartyID').val();
-                var stellingID = $('#addStellingID').val();
-                var standpunt = $('#addStandpunt').val();
+                var partyID = $('#addPartyID option:selected').val();
+                var stellingID = $('#addStellingID option:selected').val();
+                var X = $('#addXCoordinate').val();
+                var Y = $('#addYCoordinate').val();
                 var mening = $('#addMening').val();
 
                 $.ajax({
@@ -519,12 +579,13 @@ ob_start();
                     data: {
                         partyID: partyID,
                         stellingID: stellingID,
-                        standpunt: standpunt,
+                        Xcoordinate: X,
+                        Ycoordinate: Y,
                         mening: mening,
                     },
                     success: function(response) {
                         console.log(response);
-                        //location.reload();
+                        location.reload();
                     },
                     error: function(xhr, status, error) {
                         console.error(xhr.responseText);
@@ -619,6 +680,52 @@ ob_start();
             });
         });
     </script>
+
+    <script>
+        $(document).ready(function() {
+            function updateStandpuntText() {
+                var xCoordinate = parseInt($('#addXCoordinate').val());
+                var yCoordinate = parseInt($('#addYCoordinate').val());
+
+                var standpuntText = "";
+
+                if (xCoordinate > 4) {
+                    standpuntText += "Sterk Eens,";
+                } else if (xCoordinate < -4) {
+                    standpuntText += "Sterk Oneens,";
+                } else if (xCoordinate > 0) {
+                    standpuntText += "Eens,";
+                } else if (xCoordinate < 0) {
+                    standpuntText += "Oneens,";
+                }
+
+                if (standpuntText !== "") {
+                    standpuntText += " ";
+                }
+
+                if (yCoordinate > 4) {
+                    standpuntText += "Sterk Progressief";
+                } else if (yCoordinate < -4) {
+                    standpuntText += "Sterk Conversatief";
+                } else if (yCoordinate > 0) {
+                    standpuntText += "Progressief";
+                } else if (yCoordinate < 0) {
+                    standpuntText += "Conversatief";
+                }
+
+                $('#addStandpunt').val(standpuntText);
+            }
+
+            $('#addXCoordinate, #addYCoordinate').change(function() {
+                updateStandpuntText();
+            });
+
+            // Voer de updateStandpuntText functie uit bij het laden van de pagina
+            updateStandpuntText();
+        });
+    </script>
+
+
 </body>
 
 </html>
