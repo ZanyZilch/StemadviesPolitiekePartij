@@ -52,10 +52,13 @@ try {
 
                 echo "<tr>";
                 echo "<td style='display: none;'>" . $row['idPartij'] . "</td>";
-                echo "<td>" . $row['image'] . "</td>";
+                if (!empty($row['image'])) {
+                    echo "<td><img src='data:image/jpeg;base64," . base64_encode($row['image']) . "' alt='Party Image' style='width: 100px; height: 100px;'></td>"; // Assuming the image data is stored as JPEG
+                } else {
+                    echo "<td></td>";
+                }
                 echo "<td>" . $row['naam'] . "</td>";
                 echo "<td style='display: none;'>" . $row['beschrijving'] . "</td>";
-                //echo "<td>" . $row['beschrijving'] . "</td>";
                 echo "<td>" . $latitudeLabel . ", " . $longitudeLabel . "</td>"; // Display latitude and longitude as plain text
                 echo "<td>";
                 echo '<button type="button" class="btn btn-success  editPartyBtn" style="margin-right: 5px;" data-id="'. $row['idPartij']  . '"><i class="fas fa-edit"></i>EDIT</button>';

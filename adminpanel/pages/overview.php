@@ -448,23 +448,32 @@ ob_start();
 
             $('#saveChangesBtn').click(function () {
                 var partyId = $('#editPartyId').val();
-                var image = $('#editImage').val();
                 var name = $('#editName').val();
                 var description = $('#editDescription').val();
-                var latitudeLongitude = $('#editLatitudeLongitude').val();
+                var fileInput = document.getElementById('editImage');
+                var file = fileInput.files[0];
 
+                var formData = new FormData();
+                formData.append('partyId', partyId);
+                formData.append('name', name);
+                formData.append('description', description);
+                formData.append('image', file);
+
+                console.log(formData.get('partyId'));
+                console.log(formData.get('name'));
+                console.log(formData.get('description'));
+                console.log(formData.get('image'));
+
+            
                 $.ajax({
                     url: 'functions/update-partij.php',
                     type: 'POST',
-                    data: {
-                        partyId: partyId,
-                        image: image,
-                        name: name,
-                        description: description,
-                    },
+                    data: formData,
+                    processData: false,
+                    contentType: false,
                     success: function (response) {
                         console.log(response);
-                        location.reload();
+                        //location.reload();
                     },
                     error: function (xhr, status, error) {
                         console.error(xhr.responseText);
