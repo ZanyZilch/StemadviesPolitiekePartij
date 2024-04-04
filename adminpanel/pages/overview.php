@@ -21,13 +21,13 @@ ob_start();
             <div class="col-md-8">
             <h1 class="text-center mb-4">Partijen Overview</h1>
 
-            <!-- Modal page-->
+            <!-- Modal pages-->
             <!-- Button trigger modal -->
             <button id="editModalTrigger" type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" style="display: none;">
             Edit
             </button>
 
-            <!-- Partij Modal -->
+            <!-- Edit Partij Modal -->
             <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -70,7 +70,7 @@ ob_start();
                 </div>
             </div>
 
-            <!-- Stelling Modal -->
+            <!-- Edit Stelling Modal -->
             <div class="modal fade" id="stellingModal" tabindex="-1" role="dialog" aria-labelledby="stellingModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -102,7 +102,7 @@ ob_start();
                 </div>
             </div>
 
-            <!-- Modal for Meningen -->
+            <!-- Edit Meningen Modal -->
             <div class="modal fade" id="editMeningModal" tabindex="-1" role="dialog" aria-labelledby="editMeningModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -117,18 +117,66 @@ ob_start();
                             <form id="editMeningForm">
                                 <div class="form-group">
                                     <label for="editPartij">Partij:</label>
-                                    <input type="text" class="form-control" id="editPartij" name="editPartij">
+                                    <select class="form-control selectpicker" id="editPartij" name="editPartij" data-live-search="true">
+                                    <?php
+                                        $partySql = "SELECT * FROM `partij`";
+                                        $partyStmt = $verbinding->prepare($partySql);
+                                        $partyStmt->execute();
+                                        $partyResult = $partyStmt->fetchAll();
+
+                                        foreach ($partyResult as $row) {
+                                            echo "<option value='" . $row['idPartij'] . "'>" . $row['naam'] . "</option>";
+                                        }
+                                    ?>
+                                    </select>
                                 </div>
+
                                 <div class="form-group">
-                                    <label for="editStelling">Stelling:</label>
-                                    <input type="text" class="form-control" id="editStelling" name="editStelling">
+                                    <label for="editStellingID">Stelling:</label>
+                                    <select class="form-control selectpicker" id="editStellingID" name="editStellingID" data-live-search="true">
+                                    <?php
+                                        $stellingSql = "SELECT * FROM `stelling`";
+                                        $stellingStmt = $verbinding->prepare($stellingSql);
+                                        $stellingStmt->execute();
+                                        $stellingResult = $stellingStmt->fetchAll();
+
+                                        foreach ($stellingResult as $row) {
+                                            echo"<option value='". $row['idStelling'] . "'>". $row['inhoud'] . "</option>";
+                                        }
+
+                                    ?>
+                                    </select>
                                 </div>
-                                <input type="hidden" id="editIdPartij" name="editIdPartij">
-                                <input type="hidden" id="editIdStelling" name="editIdStelling">
+
                                 <div class="form-group">
-                                    <label for="editStandpunt">Standpunt:</label>
-                                    <input type="text" class="form-control" id="editStandpunt" name="editStandpunt">
+                                    <label for="addStandpunt">Standpunt:</label>
+                                    <input type="text" class="form-control" id="addStandpunt" name="addStandpunt" readonly>
+                                    
+                                    <!-- X- en Y-coördinaten naast elkaar -->
+                                    <div class="d-flex">
+                                        <div class="mr-2">
+                                            <label for="editXCoordinate">X-coordinate:</label>
+                                            <select class="form-control selectpicker" id="editXCoordinate" name="editXCoordinate" data-live-search="true" size="4">
+                                                <?php
+                                                for ($i = -5; $i <= 5; $i++) {
+                                                    echo "<option value='" . $i . "'>" . $i . "</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="editYCoordinate">Y-coordinate:</label>
+                                            <select class="form-control selectpicker" id="editYCoordinate" name="editYCoordinate" data-live-search="true" size="4">
+                                                <?php
+                                                for ($i = -5; $i <= 5; $i++) {
+                                                    echo "<option value='" . $i . "'>" . $i . "</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
+
                                 <div class="form-group">
                                     <label for="editMening">Mening:</label>
                                     <input type="text" class="form-control" id="editMening" name="editMening">
@@ -384,7 +432,7 @@ ob_start();
     <!-- Bootstrap-select JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js"></script>
 
-
+    <!-- Modal Functions Partij  -->
     <script>
         // Add Partij
         $(document).ready(function() {
@@ -484,6 +532,7 @@ ob_start();
         });
     </script>
 
+    <!-- Modal Functions Stelling  -->
     <script>
         // Add Stelling
         $(document).ready(function() {
@@ -563,6 +612,7 @@ ob_start();
         });
     </script>
     
+    <!-- Modal Functions Mening  -->
     <script>
         // Add Mening
         $(document).ready(function() {
@@ -604,25 +654,35 @@ ob_start();
                 var standpunt = $(this).closest('tr').find('td:eq(4)').text();
                 var mening = $(this).closest('tr').find('td:eq(5)').text();
 
+                var X_coordinates = $(this).closest('tr').find('td:eq(6)').text();
+                var Y_coordinates = $(this).closest('tr').find('td:eq(7)').text();
+
                 // Set values in the modal input fields
-                $('#editPartij').val(partyId);
-                $('#editStelling').val(stellingId);
-                $('#editStandpunt').val(standpunt);
+                $('#editPartij').selectpicker('val',partyId);
+                $('#editStellingID').selectpicker('val',stellingId);
+
+                $('#addStandpunt').val(standpunt);
                 $('#editMening').val(mening);
+
+                $('#editXCoordinate').selectpicker('val',X_coordinates);
+                $('#editYCoordinate').selectpicker('val',Y_coordinates);
 
                 // Show the modal
                 $('#editMeningModal').modal('show');
             });
 
-            // Handle saving changes when the saveChangesBtn in the modal is clicked
             $('#editMeningModal').on('click', '#saveChangesBtn', function () {
                 // Retrieve values from the modal input fields
-                var partyId = $('#editPartij').val();
-                var stellingId = $('#editStelling').val();
-                var standpunt = $('#editStandpunt').val();
+                var partyId = $('#editPartij option:selected').val();
+                var stellingId = $('#editStellingID option:selected').val();
+                var X = $('#editXCoordinate').val();
+                var Y = $('#editYCoordinate').val();
                 var mening = $('#editMening').val();
 
+                var standpunt = X + "," + Y
                 // Perform AJAX request to update Mening
+
+                console.log(partyId, stellingId, standpunt, mening);
                 $.ajax({
                     url: 'functions/update-mening.php',
                     type: 'POST',
@@ -681,6 +741,7 @@ ob_start();
         });
     </script>
 
+    <!-- Modal Function Mening Calculate X Y  -->
     <script>
         $(document).ready(function() {
             function updateStandpuntText() {
@@ -720,8 +781,45 @@ ob_start();
                 updateStandpuntText();
             });
 
+            function updateEditStandpuntText() {
+                var xCoordinate = parseInt($('#editXCoordinate').val());
+                var yCoordinate = parseInt($('#editYCoordinate').val());
+
+                var standpuntText = "";
+
+                if (xCoordinate > 4) {
+                    standpuntText += "Sterk Eens,";
+                } else if (xCoordinate < -4) {
+                    standpuntText += "Sterk Oneens,";
+                } else if (xCoordinate > 0) {
+                    standpuntText += "Eens,";
+                } else if (xCoordinate < 0) {
+                    standpuntText += "Oneens,";
+                }
+
+                if (standpuntText !== "") {
+                    standpuntText += " ";
+                }
+
+                if (yCoordinate > 4) {
+                    standpuntText += "Sterk Progressief";
+                } else if (yCoordinate < -4) {
+                    standpuntText += "Sterk Conversatief";
+                } else if (yCoordinate > 0) {
+                    standpuntText += "Progressief";
+                } else if (yCoordinate < 0) {
+                    standpuntText += "Conversatief";
+                }
+
+                $('#addStandpunt').val(standpuntText);
+            }
+
+            $('#editXCoordinate, #editYCoordinate').change(function() {
+                updateEditStandpuntText();
+            });
             // Voer de updateStandpuntText functie uit bij het laden van de pagina
             updateStandpuntText();
+            updateEditStandpuntText();
         });
     </script>
 
