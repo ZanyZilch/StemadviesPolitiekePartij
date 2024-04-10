@@ -117,16 +117,16 @@ ob_start();
                                 <div class="form-group">
                                     <label for="editPartij">Partij:</label>
                                     <select class="form-control selectpicker" id="editPartij" name="editPartij" data-live-search="true">
-                                    <?php
-                                        $partySql = "SELECT * FROM `partij`";
-                                        $partyStmt = $verbinding->prepare($partySql);
-                                        $partyStmt->execute();
-                                        $partyResult = $partyStmt->fetchAll();
+                                        <?php
+                                            $partySql = "SELECT * FROM `partij`";
+                                            $partyStmt = $verbinding->prepare($partySql);
+                                            $partyStmt->execute();
+                                            $partyResult = $partyStmt->fetchAll();
 
-                                        foreach ($partyResult as $row) {
-                                            echo "<option value='" . $row['idPartij'] . "'>" . $row['naam'] . "</option>";
-                                        }
-                                    ?>
+                                            foreach ($partyResult as $row) {
+                                                echo "<option value='" . $row['idPartij'] . "'>" . $row['naam'] . "</option>";
+                                            }
+                                        ?>
                                     </select>
                                 </div>
 
@@ -468,7 +468,7 @@ ob_start();
                     contentType: false,
                     success: function (response) {
                         console.log(response);
-                        //location.reload();
+                        location.reload();
                     },
                     error: function (xhr, status, error) {
                         console.error(xhr.responseText);

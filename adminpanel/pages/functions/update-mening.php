@@ -11,7 +11,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['idPartij']) && isset($
 
     $geometryString = "ST_GeomFromText('POINT($x $y)', 0)";
 
-    $updateSql = "UPDATE partij_stelling SET standpunt = $geometryString, mening = :mening WHERE idPartij = :idPartij AND idStelling = :idStelling;";
+    $updateSql = "INSERT INTO partij_stelling (idPartij, idStelling, standpunt, mening) VALUES (:idPartij, :idStelling, :standpunt, :mening)
+              ON DUPLICATE KEY UPDATE standpunt = VALUES(standpunt), mening = VALUES(mening)";
     $updateStmt = $verbinding->prepare($updateSql);
     $updateStmt->bindParam(':idPartij', $partyId);
     $updateStmt->bindParam(':idStelling', $stellingId);

@@ -59,9 +59,9 @@ try {
                 }
                 echo "<td>" . $row['naam'] . "</td>";
                 echo "<td style='display: none;'>" . $row['beschrijving'] . "</td>";
-                echo "<td>" . $latitudeLabel . ", " . $longitudeLabel . "</td>"; // Display latitude and longitude as plain text
+                echo "<td>" . $latitudeLabel . ", " . $longitudeLabel . "</td>";
                 echo "<td>";
-                echo '<button type="button" class="btn btn-success  editPartyBtn" style="margin-right: 5px;" data-id="'. $row['idPartij']  . '"><i class="fas fa-edit"></i>EDIT</button>';
+                echo '<button type="button" class="btn btn-success editPartyBtn" style="margin-right: 5px;" data-id="'. $row['idPartij']  . '"><i class="fas fa-edit"></i>EDIT</button>';
                 echo '<button type="button" class="btn btn-danger deletePartyBtn" data-id="'. $row['idPartij']  . '"><i class="fas fa-trash-alt"></i>DELETE</button>';
                 echo "</td>";
                 echo "</tr>";
