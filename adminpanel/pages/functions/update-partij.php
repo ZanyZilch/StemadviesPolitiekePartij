@@ -2,7 +2,7 @@
 include("../../DBconfig.php");
 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['partyId']) && isset($_POST['name']) && isset($_POST['description']) && isset($_FILES['image'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['partyId']) && isset($_POST['name']) && isset($_POST['description'])) {
 
     $partyId = $_POST['partyId'];
     $name = $_POST['name'];
