@@ -396,12 +396,323 @@ ob_start();
     <!-- Bootstrap-select JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js"></script>
 
-    <script src="../assets/js/partijmodal.js"></script>
+    <!-- Modal Functions Partij  -->
+    <script>
+        // Add Partij
+        $(document).ready(function() {
+            $('#savePartyBtn').click(function() {
+                var image = $('#addImage').val();
+                var name = $('#addName').val();
+                var description = $('#addDescription').val();
 
-    <script src="../assets/js/meningmodal.js"></script>
+                $.ajax({
+                    url: 'functions/create-partij.php',
+                    type: 'POST',
+                    data: {
+                        image: image,
+                        name: name,
+                        description: description,
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
 
-    <script src="../assets/js/stellingmodal.js"></script>
+        // Update Partij
+        $(document).ready(function () {
+            $('.editPartyBtn').click(function () {
+                var row = $(this).closest('tr');
+                var partyId = row.find('td:eq(0)').text();
+                var image = row.find('td:eq(1)').text();
+                var name = row.find('td:eq(2)').text();
+                var description = row.find('td:eq(3)').text();
+                var latitudeLongitude = row.find('td:eq(4)').text();
+                $('#editPartyId').val(partyId);
+                $('#editImage').val(image);
+                $('#editName').val(name);
+                $('#editDescription').val(description);
+                $('#editLatitudeLongitude').val(latitudeLongitude);
+                $('#editModal').modal('show');
+            });
 
+            $('#saveChangesBtn').click(function () {
+                var partyId = $('#editPartyId').val();
+                var name = $('#editName').val();
+                var description = $('#editDescription').val();
+                var fileInput = document.getElementById('editImage');
+                var file = fileInput.files[0];
+
+                var formData = new FormData();
+                formData.append('partyId', partyId);
+                formData.append('name', name);
+                formData.append('description', description);
+                formData.append('image', file);
+
+                console.log(formData.get('partyId'));
+                console.log(formData.get('name'));
+                console.log(formData.get('description'));
+                console.log(formData.get('image'));
+
+            
+                $.ajax({
+                    url: 'functions/update-partij.php',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        console.log(response);
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+
+            $('.custom-file-input').on('change', function () {
+                var fileName = $(this).val().split('\\').pop();
+                $(this).next('.custom-file-label').html(fileName);
+            });
+        });
+
+        // Delete Partij
+        $(document).ready(function () {
+            $('.deletePartyBtn').click(function () {
+                var partyId = $(this).data('id');
+
+                if (confirm("Ben je zeker dat je deze partij wil verwijderen?")) {
+                    $.ajax({
+                        url: 'functions/delete-partij.php',
+                        type: 'POST',
+                        data: { id: partyId },
+                        success: function (response) {
+                            console.log(response);
+                            location.reload();
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+    <!-- Modal Functions Stelling  -->
+    <script>
+        // Add Stelling
+        $(document).ready(function() {
+            $('#saveStellingBtn').click(function() {
+                var Inhoud = $('#addInhoud').val();
+                
+                $.ajax({
+                    url: 'functions/create-stelling.php',
+                    type: 'POST',
+                    data: {
+                        inhoud: Inhoud
+                    },
+                    success: function(response) {
+                        console.log(response);
+
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+
+        // Update Stelling
+        $(document).ready(function () {
+            $('.editStellingBtn').click(function () {
+                var row = $(this).closest('tr');
+                var stellingId = row.find('td:eq(0)').text();
+                var stellingInhoud = row.find('td:eq(1)').text();
+
+                $('#stellingId').val(stellingId);
+                $('#stellingInhoud').val(stellingInhoud);
+
+                $('#stellingModal').modal('show');
+            });
+
+            $('#saveStellingChangesBtn').click(function () {
+                var stellingId = $('#stellingId').val();
+                var stellingInhoud = $('#stellingInhoud').val();
+
+                $.ajax({
+                    url: 'functions/update-stelling.php',
+                    type: 'POST',
+                    data: { idStelling: stellingId, inhoud: stellingInhoud },
+                    success: function (response) {
+                        console.log(response);
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+
+        // Delete Stelling
+        $(document).ready(function () {
+            $('.deleteStellingBtn').click(function () {
+                var partyId = $(this).data('id');
+
+                if (confirm("Ben je zeker dat je deze Stelling wil verwijderen?")) {
+                    $.ajax({
+                        url: 'functions/delete-stelling.php',
+                        type: 'POST',
+                        data: { id: partyId },
+                        success: function (response) {
+                            console.log(response);
+                            location.reload();
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+    
+    <!-- Modal Functions Mening  -->
+    <script>
+        // Add Mening
+        $(document).ready(function() {
+            $('#saveMeningBtn').click(function() {
+                var partyID = $('#addPartyID option:selected').val();
+                var stellingID = $('#addStellingID option:selected').val();
+                var X = $('#addXCoordinate').val();
+                var Y = $('#addYCoordinate').val();
+                var mening = $('#addMening').val();
+
+                $.ajax({
+                    url: 'functions/create-mening.php',
+                    type: 'POST',
+                    data: {
+                        partyID: partyID,
+                        stellingID: stellingID,
+                        Xcoordinate: X,
+                        Ycoordinate: Y,
+                        mening: mening,
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+
+        // Update Mening
+        $(document).ready(function () {
+            // Show the modal when the editMeningBtn is clicked
+            $('.editMeningBtn').click(function () {
+                // Retrieve values from the row
+                var partyId = $(this).closest('tr').find('td:eq(0)').text();
+                var stellingId = $(this).closest('tr').find('td:eq(1)').text();
+                var standpunt = $(this).closest('tr').find('td:eq(4)').text();
+                var mening = $(this).closest('tr').find('td:eq(5)').text();
+
+                var X_coordinates = $(this).closest('tr').find('td:eq(6)').text();
+                var Y_coordinates = $(this).closest('tr').find('td:eq(7)').text();
+
+                // Set values in the modal input fields
+                $('#editPartij').selectpicker('val',partyId);
+                $('#editStellingID').selectpicker('val',stellingId);
+
+                $('#addStandpunt').val(standpunt);
+                $('#editMening').val(mening);
+
+                $('#editXCoordinate').selectpicker('val',X_coordinates);
+                $('#editYCoordinate').selectpicker('val',Y_coordinates);
+
+                // Show the modal
+                $('#editMeningModal').modal('show');
+            });
+
+            $('#editMeningModal').on('click', '#saveChangesBtn', function () {
+                // Retrieve values from the modal input fields
+                var partyId = $('#editPartij option:selected').val();
+                var stellingId = $('#editStellingID option:selected').val();
+                var X = $('#editXCoordinate').val();
+                var Y = $('#editYCoordinate').val();
+                var mening = $('#editMening').val();
+
+                var standpunt = X + "," + Y
+                // Perform AJAX request to update Mening
+
+                console.log(partyId, stellingId, standpunt, mening);
+                $.ajax({
+                    url: 'functions/update-mening.php',
+                    type: 'POST',
+                    data: {
+                        idPartij: partyId,
+                        idStelling: stellingId,
+                        standpunt: standpunt,
+                        mening: mening
+                    },
+                    success: function (response) {
+                        // Handle success response
+                        console.log(response);
+                        // Optionally, you can reload the page or update the table
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error response
+                        console.error(xhr.responseText);
+                    }
+                });
+
+                // Close the modal after saving changes
+                $('#editMeningModal').modal('hide');
+            });
+        });
+
+        // Delete Mening
+        $(document).ready(function () {
+            // Listen for click events on delete buttons
+            $('.deleteMeningBtn').click(function () {
+                // Retrieve the party ID and stelling ID from data attributes
+                var partyId = $(this).attr('party-id');
+                var stellingId = $(this).attr('stelling-id');
+
+                // Confirm deletion
+                if (confirm("Ben je zeker dat je deze Mening wil verwijderen?")) {
+                    // Send AJAX request to delete-mening.php
+                    $.ajax({
+                        url: 'functions/delete-mening.php',
+                        type: 'POST',
+                        data: { idParty: partyId, idStelling: stellingId },
+                        success: function (response) {
+                            // Handle success response
+                            //console.log("partyid =" + partyId, "stellingid =" + stellingId);
+                            console.log(response);
+                            // Reload the page or update the table as needed
+                            location.reload(); // For example, reload the page
+                        },
+                        error: function (xhr, status, error) {
+                            // Handle error response
+                            console.error(xhr.responseText);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 
     <!-- Modal Function Mening Calculate X Y  -->
     <script>
