@@ -1,21 +1,3 @@
-<?php 
-if (!defined('USER')) {
-    include("../DBconfig.php");
-}
-
-try {
-    $stmt = $verbinding->query("SELECT * FROM partij");
-    
-    if ($stmt->rowCount() > 0) {
-        $partyResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } else {
-        echo "<tr><td colspan='4'>Geen partijen gevonden.</td></tr>";
-    }
-} catch(PDOException $e) {
-    echo "Er is een fout opgetreden bij het ophalen van de partijgegevens: " . $e->getMessage();
-}
-?>
-
 <table class="table table-bordered table-striped table-hover table-light">
     <!-- Table header -->
     <thead>
