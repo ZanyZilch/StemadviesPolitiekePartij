@@ -19,6 +19,7 @@ $(document).ready(function() {
             },
             success: function(response) {
                 console.log(response);
+
                 location.reload();
             },
             error: function(xhr, status, error) {
@@ -77,17 +78,17 @@ $(document).ready(function () {
 // Delete Stelling
 $(document).ready(function () {
     $('.deleteStellingBtn').click(function () {
-        var stellingId = $(this).data('id');
-        //var stellingId = row.find('td:eq(0)').text();
+        var partyId = $(this).data('id');
+        var stellingId = row.find('td:eq(0)').text();
 
+        console.log(partyId);
         console.log(stellingId);
-        //console.log(stellingId);
         console.log("WHAT!");
         if (confirm("Ben je zeker dat je deze Stelling wil verwijderen?")) {
             $.ajax({
                 url: 'functions/delete-stelling.php',
                 type: 'POST',
-                data: { id: stellingId },
+                data: { id: partyId },
                 success: function (response) {
                     console.log(response);
                     location.reload();

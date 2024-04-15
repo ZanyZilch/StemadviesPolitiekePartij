@@ -37,6 +37,7 @@ $(document).ready(function () {
         // Set values in the modal input fields
         $('#editPartijMeningID').selectpicker('val',partyId);
         $('#editStellingID').selectpicker('val',stellingId);
+
         $('#editMening').val(mening);
 
         // Show the modal
@@ -97,7 +98,8 @@ $(document).ready(function () {
                     // Handle success response
                     //console.log("partyid =" + partyId, "stellingid =" + stellingId);
                     console.log(response);
-                    location.reload(); // For example, reload the page
+                    // Reload the page or update the table as needed
+                    //location.reload(); // For example, reload the page
                 },
                 error: function (xhr, status, error) {
                     // Handle error response

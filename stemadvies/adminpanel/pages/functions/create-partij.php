@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['name'])) {
     $name = $_POST['name'];
 
     // Prepare and execute the create query
-    $createSql = "INSERT INTO stemadvies_politiekepartij (partijAfbeelding, PartijNaam) VALUES (:image, :name)";
+    $createSql = "INSERT INTO stemadvies_politiekepartij (PartijNaam, partijAfbeelding) VALUES (:image, :name)";
     $createStmt = $verbinding->prepare($createSql);
     $createStmt->bindParam(':image', $image);
     $createStmt->bindParam(':name', $name);

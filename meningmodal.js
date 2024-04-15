@@ -1,8 +1,10 @@
 // Add Mening
 $(document).ready(function() {
     $('#saveMeningBtn').click(function() {
-        var partyID = $('#editPartijMeningID option:selected').val();
+        var partyID = $('#addPartyID option:selected').val();
         var stellingID = $('#addStellingID option:selected').val();
+        var X = $('#addXCoordinate').val();
+        var Y = $('#addYCoordinate').val();
         var mening = $('#addMening').val();
 
         $.ajax({
@@ -11,11 +13,13 @@ $(document).ready(function() {
             data: {
                 partyID: partyID,
                 stellingID: stellingID,
+                Xcoordinate: X,
+                Ycoordinate: Y,
                 mening: mening,
             },
             success: function(response) {
                 console.log(response);
-                //location.reload();
+                location.reload();
             },
             error: function(xhr, status, error) {
                 console.error(xhr.responseText);
@@ -31,13 +35,21 @@ $(document).ready(function () {
         // Retrieve values from the row
         var partyId = $(this).closest('tr').find('td:eq(0)').text();
         var stellingId = $(this).closest('tr').find('td:eq(1)').text();
-        var mening = $(this).closest('tr').find('td:eq(2)').text();
+        var standpunt = $(this).closest('tr').find('td:eq(4)').text();
+        var mening = $(this).closest('tr').find('td:eq(5)').text();
 
+        var X_coordinates = $(this).closest('tr').find('td:eq(6)').text();
+        var Y_coordinates = $(this).closest('tr').find('td:eq(7)').text();
 
         // Set values in the modal input fields
-        $('#editPartijMeningID').selectpicker('val',partyId);
+        $('#editPartij').selectpicker('val',partyId);
         $('#editStellingID').selectpicker('val',stellingId);
+
+        $('#addStandpunt').val(standpunt);
         $('#editMening').val(mening);
+
+        $('#editXCoordinate').selectpicker('val',X_coordinates);
+        $('#editYCoordinate').selectpicker('val',Y_coordinates);
 
         // Show the modal
         $('#editMeningModal').modal('show');
@@ -45,27 +57,30 @@ $(document).ready(function () {
 
     $('#editMeningModal').on('click', '#saveChangesBtn', function () {
         // Retrieve values from the modal input fields
-        var partyId = $('#editPartijMeningID option:selected').val();
+        var partyId = $('#editPartij option:selected').val();
         var stellingId = $('#editStellingID option:selected').val();
+        var X = $('#editXCoordinate').val();
+        var Y = $('#editYCoordinate').val();
         var mening = $('#editMening').val();
 
+        var standpunt = X + "," + Y
         // Perform AJAX request to update Mening
-        console.log(partyId);
-        console.log(stellingId);
-        console.log(mening);
+
+        console.log(partyId, stellingId, standpunt, mening);
         $.ajax({
             url: 'functions/update-mening.php',
             type: 'POST',
             data: {
                 idPartij: partyId,
                 idStelling: stellingId,
+                standpunt: standpunt,
                 mening: mening
             },
             success: function (response) {
                 // Handle success response
                 console.log(response);
                 // Optionally, you can reload the page or update the table
-                location.reload();
+                //location.reload();
             },
             error: function (xhr, status, error) {
                 // Handle error response
@@ -97,6 +112,7 @@ $(document).ready(function () {
                     // Handle success response
                     //console.log("partyid =" + partyId, "stellingid =" + stellingId);
                     console.log(response);
+                    // Reload the page or update the table as needed
                     location.reload(); // For example, reload the page
                 },
                 error: function (xhr, status, error) {

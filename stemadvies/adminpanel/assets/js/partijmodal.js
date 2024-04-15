@@ -4,9 +4,6 @@ $(document).ready(function() {
         var image = $('#addImage').val();
         var name = $('#addName').val();
 
-        console.log("image " + image);
-        console.log("name " +name);
-
         $.ajax({
             url: 'functions/create-partij.php',
             type: 'POST',
@@ -83,6 +80,10 @@ $(document).ready(function () {
     $('.deletePartyBtn').click(function () {
         var partyId = $(this).data('id');
 
+        var otherpartyId = row.find('td:eq(0)').text();
+        
+        console.log(partyId);
+        console.log(otherpartyId);
         if (confirm("Ben je zeker dat je deze partij wil verwijderen?")) {
             $.ajax({
                 url: 'functions/delete-partij.php',

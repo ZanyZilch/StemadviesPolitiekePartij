@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
     $partyId = $_POST['id'];
 
     // Prepare and execute the delete query
-    $deleteSql = "DELETE FROM stemadvies_politiekepartij WHERE PartijID = :id";
+    $deleteSql = "DELETE FROM stemadvies_stelling WHERE PartijID = :id";
     $deleteStmt = $verbinding->prepare($deleteSql);
     $deleteStmt->bindParam(':id', $partyId);
     $deleteStmt->execute();

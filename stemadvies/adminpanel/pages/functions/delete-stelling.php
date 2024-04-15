@@ -5,15 +5,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
     $partyId = $_POST['id'];
 
     // Prepare and execute the delete query
-    $deleteSql = "DELETE FROM stemadvies_politiekepartij WHERE PartijID = :id";
+    $deleteSql = "DELETE FROM `stemadvies_politiekepartij` WHERE `PartijID`  = :id";
     $deleteStmt = $verbinding->prepare($deleteSql);
     $deleteStmt->bindParam(':id', $partyId);
     $deleteStmt->execute();
 
     if ($deleteStmt->rowCount() > 0) {
-        echo "Partij deleted successfully";
+        echo "Stelling deleted successfully";
     } else {
-        echo "Failed to delete partij";
+        echo "Failed to delete Stelling";
     }
 } else {
     echo "Invalid request";

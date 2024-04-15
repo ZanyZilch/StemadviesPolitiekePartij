@@ -35,6 +35,8 @@ try {
             $partyResult = $partyStmt->fetchAll();
 
             foreach ($partyResult as $row) {
+
+
                 echo "<tr>";
                 echo "<td style='display: none;'>" . $row['PartijID'] . "</td>";
                 if (!empty($row['partijAfbeelding'])) {
